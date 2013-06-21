@@ -1,0 +1,1 @@
+This is the full SPRING TOOL SUITE work space for a genetic program. Just download and open with eclipse or http://www.springsource.org/downloads/sts-ggts
