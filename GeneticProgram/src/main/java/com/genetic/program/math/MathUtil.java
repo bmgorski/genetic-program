@@ -77,6 +77,10 @@ public class MathUtil {
 		return environmentVariables;
 	}
 	
+	public static double stringToDouble(String doubleString){
+		return new BigDecimal(doubleString).doubleValue();
+	}
+	
 	public static List<BigDecimal> generateEnviromnentTargets(List<BigDecimal> environments, ExpressionNode expr){
 		List<BigDecimal> enviromnentTargets = new ArrayList<BigDecimal>();
 		
