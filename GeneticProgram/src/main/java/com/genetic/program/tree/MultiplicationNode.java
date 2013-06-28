@@ -11,7 +11,7 @@ public class MultiplicationNode extends Operator implements TreeNode  {
 	}
 
 	@Override
-	public double getValue(HashMap<String, String> variables) {
-		return getLeftNode().getValue(variables) * getRightNode().getValue(variables);
+	public double getValue(HashMap<String, Double> variables) {
+		return this.getLeftNode().getValue(variables) * this.getRightNode().getValue(variables);
 	}
 }

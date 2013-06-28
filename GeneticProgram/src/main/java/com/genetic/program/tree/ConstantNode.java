@@ -11,7 +11,7 @@ public class ConstantNode extends Operand implements TreeNode  {
 	}
 
 	@Override
-	public double getValue(HashMap<String, String> variables) {
-		return getLeafValue();
+	public double getValue(HashMap<String, Double> variables) {
+		return this.getLeafValue();
 	}
 }

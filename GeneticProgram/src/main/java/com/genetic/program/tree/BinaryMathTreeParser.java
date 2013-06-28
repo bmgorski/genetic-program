@@ -1,12 +1,18 @@
 package com.genetic.program.tree;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.genetic.program.controller.HomeController;
 import com.genetic.program.math.MathUtil;
 
-public class BinaryMathTreeParser {
+public class BinaryMathTreeParser  {
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
 	/**
 	 * Takes a well formated equation and parses it to a binary math tree
 	 * 
@@ -19,26 +25,117 @@ public class BinaryMathTreeParser {
 	public static BinaryMathTree stringEquationToBinaryMathTree(String equation)
 			throws BinaryMathTreeException {
 		BinaryMathTree binaryMathTree = new BinaryMathTree();
-		TreeNode rootNode = null;
+		
 
 		// We do not support upper case variables
 		equation = equation.toLowerCase();
+		
+		// Spaces are not needed		
+		logger.trace("equation: " + equation);
 
-		String strings[] = equation.split("");
+		String[] input = checkForValidityAndReturnInputAndSetVariableNames(equation, binaryMathTree);
+		String[] output = ReversePolishNotation.infixToRPN(input);
+		
+	
+		if(logger.isDebugEnabled()){
+			StringBuilder stringBuilder = new StringBuilder();
+			for (String token : output) {
+				stringBuilder.append(token + " ");
+			}
+			
+			logger.trace("output: " + stringBuilder.toString());
+		}
+		
+		TreeNode rootNode = reversPolishNotationToBinaryMathTree(output);
+		binaryMathTree.setRootNode(rootNode);
 
+		return binaryMathTree;
+	}
+	
+	private static TreeNode reversPolishNotationToBinaryMathTree(String[] outputs){		
+		Stack<Object> objects = new Stack<Object>();
+		
+		for(String output : outputs){
+			logger.trace("Object Legth: " + objects.size() + "Current String: " + output);
+			
+			if(ReversePolishNotation.OPERATORS.containsKey(output)){
+				TreeNode treeNodeRight = (TreeNode)objects.pop();
+				
+				//It is valid for a node to only have one child is some cases
+				logger.trace("TreeNode isEmpty: " + objects.isEmpty());
+				
+				TreeNode treeNodeLeft = null;
+				if(!objects.isEmpty()){
+					treeNodeLeft = (TreeNode)objects.pop();
+				}
+				
+				if(isAddition(output)){
+					AdditionNode additionNode = new AdditionNode();
+					additionNode.setTreeNodes(treeNodeLeft, treeNodeRight);
+					objects.push(additionNode);
+				}
+				else if(isDivision(output)){
+					DivisionNode divisionNode = new DivisionNode();
+					divisionNode.setTreeNodes(treeNodeLeft, treeNodeRight);
+					objects.push(divisionNode);
+				}
+				else if(isMultiplication(output)){
+					MultiplicationNode multiplicationNode = new MultiplicationNode();
+					multiplicationNode.setTreeNodes(treeNodeLeft, treeNodeRight);
+					objects.push(multiplicationNode);				
+				}
+				else if(isSubtration(output)){
+					SubtractionNode subtractionNode = new SubtractionNode();
+					subtractionNode.setTreeNodes(treeNodeLeft, treeNodeRight);
+					objects.push(subtractionNode);
+				}
+			}
+			else if(isVariable(output)){
+				VariableNode variableNode = new VariableNode();
+				variableNode.setVariableName(output);
+				objects.push(variableNode);
+			}
+			//we know it is a number aka a constant
+			else{
+				ConstantNode constantNode = new ConstantNode();
+				constantNode.setLeafValue(MathUtil.stringToDouble(output));
+				objects.push(constantNode);
+			}
+			
+			logger.trace("Object Legth: " + objects.size() + "Current String: " + output);
+		}
+		
+		
+		return (TreeNode)objects.pop();
+	}
+	
+	private static String[] checkForValidityAndReturnInputAndSetVariableNames(String equation, BinaryMathTree binaryMathTree) throws BinaryMathTreeException{
+		String[] strings = equation.split("");
 		Stack<String> parentheses = new Stack<String>();
-
+		List<String> input = new ArrayList<String>();
+		logger.trace("strings length : " + strings.length);
+		
+		//Test for validity and parse into an input for the ReversePolishNotation parser
 		for (int i = 0; i < strings.length; i++) {
 			String thisString = strings[i];
-
+			
+			logger.trace("thisString: '" + thisString + "'");
+			//remove spaces and empty
+			if(thisString.equals(" ") || thisString.isEmpty()){
+				continue;
+			}			
+			
 			/*
 			 * Dealing with parentheses
 			 */
 			if (thisString.equals("(")) {
 				parentheses.push(thisString);
+				input.add(thisString);
+				
 			} else if (thisString.equals(")")) {
 				if (parentheses.size() > 0) {
 					parentheses.pop();
+					input.add(thisString);
 				} else {
 					throw new BinaryMathTreeException(
 							"Missmatached parentheses");
@@ -49,33 +146,23 @@ public class BinaryMathTreeParser {
 			 * Dealing with numbers
 			 */
 			else if(isNumber(thisString)){
-				StringBuilder stringBuilder = new StringBuilder(); 
+				StringBuilder sb = new StringBuilder(); 
 				
-				stringBuilder.append(thisString);
+				sb.append(thisString);
 				
 				while(i + 1 < strings.length && isNumber(strings[i + 1])){
-					stringBuilder.append(strings[i + 1]);
+					sb.append(strings[i + 1]);
 					i++;
 				}
 				
-				ConstantNode constantNode = new ConstantNode();
-				constantNode.setLeafValue(MathUtil.stringToDouble(stringBuilder.toString()));
+				input.add(sb.toString());
 			}
-			else if(isVariable(thisString)){				
-				VariableNode variableNode = new VariableNode();
-				variableNode.setVariableName(thisString);
+			else if(isVariable(thisString)){
+				binaryMathTree.getVariableNames().add(thisString);
+				input.add(thisString);
 			}
-			else if(isAddition(thisString)){				
-				AdditionNode variableNode = new AdditionNode();
-			}
-			else if(isSubtration(thisString)){				
-				SubtractionNode subtractionNode = new SubtractionNode();
-			}
-			else if(isMultiplication(thisString)){				
-				MultiplicationNode multiplicationNode = new MultiplicationNode();
-			}
-			else if(isDivision(thisString)){				
-				DivisionNode divisionNode = new DivisionNode();
+			else if(ReversePolishNotation.OPERATORS.containsKey(thisString)){				
+				input.add(thisString);
 			}
 			else{
 				throw new BinaryMathTreeException("Unknow character");
@@ -85,20 +172,16 @@ public class BinaryMathTreeParser {
 		if (parentheses.size() > 0) {
 			throw new BinaryMathTreeException("Missmatached parentheses");
 		}
-
-		return binaryMathTree;
+		
+		return input.toArray(new String[input.size()]);
 	}
 
 	private static boolean isNumber(String lengthOneString) {
-		Pattern p = Pattern.compile(lengthOneString);
-		Matcher m = p.matcher("\\d");
-		return m.matches();
+		return Character.isDigit(lengthOneString.charAt(0));
 	}
 	
 	private static boolean isVariable(String lengthOneString) {
-		Pattern p = Pattern.compile(lengthOneString);
-		Matcher m = p.matcher("[a-z]");
-		return m.matches();
+		return Character.isLowerCase(lengthOneString.charAt(0));
 	}
 	
 	private static boolean isMultiplication(String lengthOneString) {
@@ -111,6 +194,6 @@ public class BinaryMathTreeParser {
 		return lengthOneString.equals("+");
 	}
 	private static boolean isSubtration(String lengthOneString) {
-		return lengthOneString.equals("/");
+		return lengthOneString.equals("-");
 	}
 }

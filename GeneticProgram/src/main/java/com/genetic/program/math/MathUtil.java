@@ -2,14 +2,12 @@ package com.genetic.program.math;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
-import uk.co.cogitolearning.cogpar.ExpressionNode;
-import uk.co.cogitolearning.cogpar.SetVariable;
+import com.genetic.program.tree.BinaryMathTree;
 
 public class MathUtil {
 	private static final Logger logger = LoggerFactory
@@ -81,13 +79,17 @@ public class MathUtil {
 		return new BigDecimal(doubleString).doubleValue();
 	}
 	
-	public static List<BigDecimal> generateEnviromnentTargets(List<BigDecimal> environments, ExpressionNode expr){
+	public static List<BigDecimal> generateEnviromnentTargets(List<BigDecimal> environments, BinaryMathTree binaryMathTree){
 		List<BigDecimal> enviromnentTargets = new ArrayList<BigDecimal>();
 		
 		for(BigDecimal bigDecimal : environments){
-			expr.accept(new SetVariable("x", bigDecimal.doubleValue()));
-			Double value = (Double)expr.getValue();
-			BigDecimal enviromnentTarget = new BigDecimal(value.toString());
+			HashMap<String, Double> variables = new HashMap<String, Double>();
+			variables.put("x", bigDecimal.doubleValue());
+			
+			BigDecimal enviromnentTarget = new BigDecimal(binaryMathTree.getValue(variables));
+			
+			logger.trace(binaryMathTree.getRootNode().nodeType() + "");
+			
 			logger.trace("EnviromnentTargets: " + enviromnentTarget);
 			enviromnentTargets.add(enviromnentTarget);
 		}

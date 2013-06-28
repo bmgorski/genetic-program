@@ -1,10 +1,11 @@
 package com.genetic.program.model.generation;
 
 import java.math.BigDecimal;
-import uk.co.cogitolearning.cogpar.ExpressionNode;
+
+import com.genetic.program.tree.BinaryMathTree;
 
 public class Gene {
-	private ExpressionNode expressionNode;
+	private BinaryMathTree genes;
 	private BigDecimal score;
 
 	public BigDecimal getScore() {
@@ -13,13 +14,5 @@ public class Gene {
 
 	public void setScore(BigDecimal score) {
 		this.score = score;
-	}
-
-	public ExpressionNode getExpressionNode() {
-		return expressionNode;
-	}
-
-	public void setExpressionNode(ExpressionNode expressionNode) {
-		this.expressionNode = expressionNode;
 	}
 }

@@ -7,11 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.co.cogitolearning.cogpar.ExpressionNode;
-import uk.co.cogitolearning.cogpar.Parser;
-
 import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Settings;
+import com.genetic.program.tree.BinaryMathTree;
+import com.genetic.program.tree.BinaryMathTreeException;
+import com.genetic.program.tree.BinaryMathTreeParser;
 
 /**
  * Handles requests for the application home page.
@@ -19,6 +19,7 @@ import com.genetic.program.model.generation.Settings;
 @Controller
 public class HomeController {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 	/**
@@ -35,11 +36,14 @@ public class HomeController {
 			)
 		);
 		
-		Parser parser = new Parser();
+		BinaryMathTree binaryMathTree;
 		
-		ExpressionNode expr = parser.parse(settings.getTargetFunction());
-		
-		settings.setEnviromentFitnessTargets(MathUtil.generateEnviromnentTargets(settings.getEnvironmentVariables(), expr));
+		try {
+			binaryMathTree = BinaryMathTreeParser.stringEquationToBinaryMathTree(settings.getTargetFunction());
+			settings.setEnviromentFitnessTargets(MathUtil.generateEnviromnentTargets(settings.getEnvironmentVariables(), binaryMathTree));
+		} catch (BinaryMathTreeException e) {
+			e.printStackTrace();
+		}
 		
 		return "home";
 	}

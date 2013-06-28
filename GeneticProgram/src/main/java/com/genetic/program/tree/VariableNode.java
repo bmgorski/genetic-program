@@ -2,9 +2,6 @@ package com.genetic.program.tree;
 
 import java.util.HashMap;
 
-import com.genetic.program.math.MathUtil;
-
-
 public class VariableNode extends Operand implements TreeNode  {
 	private String variableName;
 	
@@ -14,8 +11,8 @@ public class VariableNode extends Operand implements TreeNode  {
 	}
 
 	@Override
-	public double getValue(HashMap<String, String> variables) {
-		return MathUtil.stringToDouble(variables.get(variableName));
+	public double getValue(HashMap<String, Double> variables) {
+		return variables.get(variableName);
 	}
 
 	public String getVariableName() {

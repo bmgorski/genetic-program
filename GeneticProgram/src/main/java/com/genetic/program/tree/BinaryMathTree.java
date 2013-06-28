@@ -16,7 +16,7 @@ public class BinaryMathTree {
 		this.rootNode = rootNode;
 	}
 
-	public double getValue(HashMap<String, String> variables){
+	public double getValue(HashMap<String, Double> variables){
 		return rootNode.getValue(variables);
 	}
 
