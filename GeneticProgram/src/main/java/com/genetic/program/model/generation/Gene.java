@@ -15,4 +15,12 @@ public class Gene {
 	public void setScore(BigDecimal score) {
 		this.score = score;
 	}
+
+	public BinaryMathTree getGenes() {
+		return genes;
+	}
+
+	public void setGenes(BinaryMathTree genes) {
+		this.genes = genes;
+	}
 }

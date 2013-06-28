@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.genetic.program.controller.HomeController;
 
 public class ReversePolishNotation {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 	// Associativity constants for operators
