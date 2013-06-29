@@ -4,9 +4,10 @@ import java.math.BigDecimal;
 
 import com.genetic.program.tree.BinaryMathTree;
 
-public class Gene {
+public class Gene implements Comparable<Gene> {
 	private BinaryMathTree genes;
-	private BigDecimal score;
+	private BigDecimal score = BigDecimal.ZERO;
+	private boolean removeFromGeneration = false;
 
 	public BigDecimal getScore() {
 		return score;
@@ -22,5 +23,18 @@ public class Gene {
 
 	public void setGenes(BinaryMathTree genes) {
 		this.genes = genes;
+	}
+
+	@Override
+	public int compareTo(Gene o) {
+		return this.getScore().compareTo(o.getScore());
+	}
+
+	public boolean isRemoveFromGeneration() {
+		return removeFromGeneration;
+	}
+
+	public void setRemoveFromGeneration(boolean removeFromGeneration) {
+		this.removeFromGeneration = removeFromGeneration;
 	}
 }

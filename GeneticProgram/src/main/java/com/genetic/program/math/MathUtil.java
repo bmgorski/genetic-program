@@ -79,7 +79,7 @@ public class MathUtil {
 		return new BigDecimal(doubleString).doubleValue();
 	}
 	
-	public static List<BigDecimal> generateEnviromnentTargets(List<BigDecimal> environments, BinaryMathTree binaryMathTree){
+	public static List<BigDecimal> generateBinaryMathTreeScores(List<BigDecimal> environments, BinaryMathTree binaryMathTree){
 		List<BigDecimal> enviromnentTargets = new ArrayList<BigDecimal>();
 		
 		for(BigDecimal bigDecimal : environments){
@@ -94,8 +94,8 @@ public class MathUtil {
 			enviromnentTargets.add(enviromnentTarget);
 		}
 		
-		logger.trace("EnviromnentTargets: " + enviromnentTargets);
-		logger.trace("EnviromnentTargetsSize: " + enviromnentTargets.size());
+		logger.trace("binaryMathTreeScores: " + enviromnentTargets);
+		logger.trace("binaryMathTreeScores: " + enviromnentTargets.size());
 		
 		return enviromnentTargets;
 	}

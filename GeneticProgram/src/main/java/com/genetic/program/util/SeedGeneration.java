@@ -1,11 +1,8 @@
 package com.genetic.program.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -52,7 +49,7 @@ public class SeedGeneration {
 		
 		String expression = generateFunction(seedGenerationSettings, validOperators);
 		
-		logger.debug("Expression: " + expression);
+		logger.trace("Expression: " + expression);
 		
 		try {
 			gene.setGenes(BinaryMathTreeParser.stringEquationToBinaryMathTree(expression));
@@ -111,8 +108,8 @@ public class SeedGeneration {
 					leftParenthesesLocation = leftParenthesesLocation - 1;
 				}
 				
-				logger.debug("rightParenthesesLocation: " + rightParenthesesLocation);
-				logger.debug("leftParenthesesLocation: " + leftParenthesesLocation);
+				logger.trace("rightParenthesesLocation: " + rightParenthesesLocation);
+				logger.trace("leftParenthesesLocation: " + leftParenthesesLocation);
 				
 				if(!parentheses.containsKey(rightParenthesesLocation) && !parentheses.containsKey(leftParenthesesLocation)){
 					parentheses.put(rightParenthesesLocation, "(");
@@ -148,7 +145,7 @@ public class SeedGeneration {
 	private static String[] randomConstantsAndVariablesGenerator(int numberOFVariableAndConstancts, int minInt,
 			int maxInt) {
 		String[] constantsAndVariables = new String[numberOFVariableAndConstancts];
-		int numberOfConstants = MathUtil.randomNumber(1, numberOFVariableAndConstancts-1);
+		int numberOfConstants = MathUtil.randomNumber(1, 3);
 				
 		int countNumberOfConstantsAdded = 0;
 		while(numberOfConstants > countNumberOfConstantsAdded){

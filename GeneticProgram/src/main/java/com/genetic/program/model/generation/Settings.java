@@ -3,13 +3,16 @@ package com.genetic.program.model.generation;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.genetic.program.math.MathUtil;
+
 public class Settings {
 	private SeedGenerationSettings seedGenerationSettings = new SeedGenerationSettings();
 	private String targetFunction = "(2*x*x -1)/2";
 	
 	private BigDecimal quadraticA = new BigDecimal("2");
 	private BigDecimal quadraticB = BigDecimal.ZERO;
-	private Integer enviromentSize = 500;
+	private Integer enviromentSize = 200;
+	private BigDecimal maxFitnessValue = new BigDecimal("1000");
 	
 	private List<BigDecimal> environmentVariables;
 	private List<BigDecimal> enviromentFitnessTargets;
@@ -125,5 +128,13 @@ public class Settings {
 
 	public void setValidOperators(String[] validOperators) {
 		this.validOperators = validOperators;
+	}
+
+	public BigDecimal getMaxFitnessValue() {
+		return maxFitnessValue;
+	}
+
+	public void setMaxFitnessValue(BigDecimal maxFitnessValue) {
+		this.maxFitnessValue = maxFitnessValue;
 	}
 }
