@@ -13,6 +13,7 @@ public class Settings {
 	
 	private List<BigDecimal> environmentVariables;
 	private List<BigDecimal> enviromentFitnessTargets;
+	private String[] validOperators = new String[]{"*","/","+","-"};
 	
 	public Settings() {
 
@@ -116,5 +117,13 @@ public class Settings {
 	 */
 	public void setQuadraticB(BigDecimal quadraticB) {
 		this.quadraticB = quadraticB;
+	}
+
+	public String[] getValidOperators() {
+		return validOperators;
+	}
+
+	public void setValidOperators(String[] validOperators) {
+		this.validOperators = validOperators;
 	}
 }

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.genetic.program.math.MathUtil;
+import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.Settings;
 import com.genetic.program.tree.BinaryMathTree;
 import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
+import com.genetic.program.util.SeedGeneration;
 
 /**
  * Handles requests for the application home page.
@@ -36,11 +38,12 @@ public class HomeController {
 			)
 		);
 		
-		BinaryMathTree binaryMathTree;
-		
 		try {
-			binaryMathTree = BinaryMathTreeParser.stringEquationToBinaryMathTree(settings.getTargetFunction());
+			BinaryMathTree binaryMathTree = BinaryMathTreeParser.stringEquationToBinaryMathTree(settings.getTargetFunction());
 			settings.setEnviromentFitnessTargets(MathUtil.generateEnviromnentTargets(settings.getEnvironmentVariables(), binaryMathTree));
+			
+			Generation seedGeneration = SeedGeneration.getSeeds(settings.getSeedGenerationSettings(), settings.getValidOperators());
+			
 		} catch (BinaryMathTreeException e) {
 			e.printStackTrace();
 		}

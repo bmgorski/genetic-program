@@ -2,16 +2,15 @@ package com.genetic.program.model.generation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
 public class Generation {
-	private List<Future<Gene>> genes = new ArrayList<Future<Gene>>();
+	private List<Gene> genes = new ArrayList<Gene>();
 
-	public List<Future<Gene>> getGenes() {
+	public List<Gene> getGenes() {
 		return genes;
 	}
 
-	public void setGenes(List<Future<Gene>> genes) {
+	public void setGenes(List<Gene> genes) {
 		this.genes = genes;
 	}
 

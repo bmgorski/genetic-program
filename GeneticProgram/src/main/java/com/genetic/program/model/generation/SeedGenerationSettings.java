@@ -7,6 +7,28 @@ public class SeedGenerationSettings {
 	private int maxNumberOfParentheses = 1;
 	private int minNumberOfParentheses = 0;
 	
+	/**
+	 * currently only supports 1 threw 9
+	 */
+	private int minInt = 1;
+	private int maxInt = 9;
+	
+	public int getMinInt() {
+		return minInt;
+	}
+
+	public void setMinInt(int minInt) {
+		this.minInt = minInt;
+	}
+
+	public int getMaxInt() {
+		return maxInt;
+	}
+
+	public void setMaxInt(int maxInt) {
+		this.maxInt = maxInt;
+	}
+
 	public int getMaxNumberOfOperators() {
 		return maxNumberOfOperators;
 	}
