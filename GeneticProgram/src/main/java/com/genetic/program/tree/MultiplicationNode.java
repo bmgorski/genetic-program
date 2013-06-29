@@ -3,7 +3,7 @@ package com.genetic.program.tree;
 import java.util.HashMap;
 
 
-public class MultiplicationNode extends Operator implements TreeNode  {
+public class MultiplicationNode extends Operator {
 
 	@Override
 	public int nodeType() {

@@ -2,7 +2,7 @@ package com.genetic.program.tree;
 
 import java.util.HashMap;
 
-public class VariableNode extends Operand implements TreeNode  {
+public class VariableNode extends Operand  {
 	private String variableName;
 	
 	@Override

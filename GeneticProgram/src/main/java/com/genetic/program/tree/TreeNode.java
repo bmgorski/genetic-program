@@ -19,4 +19,6 @@ public interface TreeNode {
 	public int nodeType();
 	
 	public double getValue(HashMap<String, Double> variables);
+	
+	public int getNumberOfChildren();
 }

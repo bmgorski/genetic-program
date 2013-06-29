@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.genetic.program.controller.HomeController;
 
 
-public class AdditionNode extends Operator implements TreeNode  {
+public class AdditionNode extends Operator {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 	@Override

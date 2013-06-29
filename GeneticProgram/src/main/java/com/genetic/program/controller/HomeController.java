@@ -27,7 +27,11 @@ import com.genetic.program.util.SeedGeneration;
 public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
+	private GenerationToGeneration _generationToGeneration;
+	
+	public HomeController(GenerationToGeneration generationToGeneration) {
+		this._generationToGeneration = generationToGeneration;
+	}
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -99,7 +103,7 @@ public class HomeController {
 				}
 				
 				
-				Generation newGeneration = GenerationToGeneration.populate(oldGeneration);
+				Generation newGeneration = _generationToGeneration.populate(oldGeneration);
 				
 				ScoreGeneration.caluclateScoresAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 

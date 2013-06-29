@@ -3,7 +3,7 @@ package com.genetic.program.tree;
 import java.util.HashMap;
 
 
-public class ConstantNode extends Operand implements TreeNode  {
+public class ConstantNode extends Operand  {
 
 	@Override
 	public int nodeType() {

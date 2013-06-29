@@ -23,4 +23,8 @@ public class BinaryMathTree {
 	public List<String> getVariableNames() {
 		return variableNames;
 	}
+	
+	public int size(){
+		return rootNode.getNumberOfChildren();
+	}
 }
