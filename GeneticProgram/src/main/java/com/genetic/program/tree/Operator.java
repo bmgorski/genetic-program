@@ -30,4 +30,6 @@ public abstract class Operator  implements TreeNode {
 
 		return numberOfChildren + getLeftNode().getNumberOfChildren() + getRightNode().getNumberOfChildren();
 	}
+	
+	public abstract String operatorStringEquivalant();
 }

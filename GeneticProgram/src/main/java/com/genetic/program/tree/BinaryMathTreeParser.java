@@ -69,26 +69,11 @@ public class BinaryMathTreeParser  {
 					treeNodeLeft = (TreeNode)objects.pop();
 				}
 				
-				if(isAddition(output)){
-					AdditionNode additionNode = new AdditionNode();
-					additionNode.setTreeNodes(treeNodeLeft, treeNodeRight);
-					objects.push(additionNode);
-				}
-				else if(isDivision(output)){
-					DivisionNode divisionNode = new DivisionNode();
-					divisionNode.setTreeNodes(treeNodeLeft, treeNodeRight);
-					objects.push(divisionNode);
-				}
-				else if(isMultiplication(output)){
-					MultiplicationNode multiplicationNode = new MultiplicationNode();
-					multiplicationNode.setTreeNodes(treeNodeLeft, treeNodeRight);
-					objects.push(multiplicationNode);				
-				}
-				else if(isSubtration(output)){
-					SubtractionNode subtractionNode = new SubtractionNode();
-					subtractionNode.setTreeNodes(treeNodeLeft, treeNodeRight);
-					objects.push(subtractionNode);
-				}
+				Operator operator = operatorStringToTreeNode(output);
+
+				operator.setTreeNodes(treeNodeLeft, treeNodeRight);
+				objects.push(operator);
+				
 			}
 			else if(isVariable(output)){
 				VariableNode variableNode = new VariableNode();
@@ -184,16 +169,34 @@ public class BinaryMathTreeParser  {
 		return Character.isLowerCase(lengthOneString.charAt(0));
 	}
 	
-	private static boolean isMultiplication(String lengthOneString) {
-		return lengthOneString.equals("*");
+	private static boolean isMultiplication(String newOperatorString) {
+		return newOperatorString.equals("*");
 	}
-	private static boolean isDivision(String lengthOneString) {
-		return lengthOneString.equals("/");
+	private static boolean isDivision(String newOperatorString) {
+		return newOperatorString.equals("/");
 	}
-	private static boolean isAddition(String lengthOneString) {
-		return lengthOneString.equals("+");
+	private static boolean isAddition(String newOperatorString) {
+		return newOperatorString.equals("+");
 	}
-	private static boolean isSubtration(String lengthOneString) {
-		return lengthOneString.equals("-");
+	private static boolean isSubtration(String newOperatorString) {
+		return newOperatorString.equals("-");
+	}
+	
+	public static Operator operatorStringToTreeNode(String newOperatorString) {
+		Operator operator = null;
+		if(isAddition(newOperatorString)){
+			operator = new AdditionNode();
+		}
+		else if(isDivision(newOperatorString)){
+			operator = new DivisionNode();
+		}
+		else if(isMultiplication(newOperatorString)){
+			operator = new MultiplicationNode();			
+		}
+		else if(isSubtration(newOperatorString)){
+			operator = new SubtractionNode();
+		}
+		
+		return operator;
 	}
 }

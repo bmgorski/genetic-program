@@ -96,14 +96,9 @@ public class HomeController {
 			Generation oldGeneration = seedGeneration;
 			
 			while(!oldGeneration.getGenes().get(0).getScore().equals(BigDecimal.ZERO)){
-				logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getScore().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");
+				logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getScore().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");				
 				
-				if(generationNumber == 0){
-					break;
-				}
-				
-				
-				Generation newGeneration = _generationToGeneration.populate(oldGeneration);
+				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
 				
 				ScoreGeneration.caluclateScoresAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 
@@ -114,6 +109,8 @@ public class HomeController {
 				oldGeneration = newGeneration;
 				generationNumber++;
 			}
+			
+			logger.debug("Yeah we won!!!");
 
 			
 			

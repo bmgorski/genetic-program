@@ -14,4 +14,9 @@ public class MultiplicationNode extends Operator {
 	public double getValue(HashMap<String, Double> variables) {
 		return this.getLeftNode().getValue(variables) * this.getRightNode().getValue(variables);
 	}
+	
+	@Override
+	public String operatorStringEquivalant() {
+		return "*";
+	}
 }

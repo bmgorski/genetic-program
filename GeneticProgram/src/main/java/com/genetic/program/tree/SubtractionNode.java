@@ -28,4 +28,9 @@ public class SubtractionNode extends Operator  {
 		
 		return this.getLeftNode().getValue(variables) - this.getRightNode().getValue(variables);
 	}
+	
+	@Override
+	public String operatorStringEquivalant() {
+		return "-";
+	}
 }

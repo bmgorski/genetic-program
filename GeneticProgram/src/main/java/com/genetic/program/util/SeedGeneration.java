@@ -18,6 +18,7 @@ import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.SeedGenerationSettings;
 import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
+import com.genetic.program.tree.Operator;
 
 public class SeedGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(SeedGeneration.class);
@@ -167,7 +168,7 @@ public class SeedGeneration {
 		return constantsAndVariables;
 	}
 
-	private static String randomOperator(String[] validOperators){
+	public static String randomOperator(String[] validOperators){
 		return validOperators[MathUtil.randomNumber(0, validOperators.length-1)];
 	}
 }
