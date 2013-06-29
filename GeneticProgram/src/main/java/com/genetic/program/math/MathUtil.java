@@ -79,7 +79,7 @@ public class MathUtil {
 		return new BigDecimal(doubleString).doubleValue();
 	}
 	
-	public static List<BigDecimal> generateBinaryMathTreeScores(List<BigDecimal> environments, BinaryMathTree binaryMathTree){
+	public static List<BigDecimal> generateBinaryMathTreeFitness(List<BigDecimal> environments, BinaryMathTree binaryMathTree){
 		List<BigDecimal> enviromnentTargets = new ArrayList<BigDecimal>();
 		
 		for(BigDecimal bigDecimal : environments){

@@ -18,7 +18,6 @@ import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.SeedGenerationSettings;
 import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
-import com.genetic.program.tree.Operator;
 
 public class SeedGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(SeedGeneration.class);
@@ -79,12 +78,8 @@ public class SeedGeneration {
 			
 			stringBuilder.append(randomOperator(validOperators));
 			
-			if(i == 0){
-				stringBuilder.append(constantsAndVariables[1]);
-			}
-			else{
-				stringBuilder.append(constantsAndVariables[i + 1]);
-			}
+
+			stringBuilder.append(constantsAndVariables[i + 1]);
 		}
 		
 		

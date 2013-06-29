@@ -3,11 +3,9 @@ package com.genetic.program.model.generation;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.genetic.program.math.MathUtil;
-
 public class Settings {
 	private SeedGenerationSettings seedGenerationSettings = new SeedGenerationSettings();
-	private String targetFunction = "(2*x*x -1)/2";
+	private String targetFunction = "(2*x*x-1)/2";
 	
 	private BigDecimal quadraticA = new BigDecimal("2");
 	private BigDecimal quadraticB = BigDecimal.ZERO;

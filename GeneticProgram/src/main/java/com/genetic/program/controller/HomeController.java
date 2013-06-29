@@ -17,7 +17,7 @@ import com.genetic.program.tree.BinaryMathTree;
 import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
 import com.genetic.program.util.GenerationToGeneration;
-import com.genetic.program.util.ScoreGeneration;
+import com.genetic.program.util.CalculateFitness;
 import com.genetic.program.util.SeedGeneration;
 
 /**
@@ -41,7 +41,7 @@ public class HomeController {
 		Settings settings = new Settings();
 		Date startTime;
 		Date endTime;
-		
+
 		startTime = new Date();
 		logger.debug("Setting EnvironmentVariables Time: " + startTime.getTime());
 		settings.setEnvironmentVariables(
@@ -50,6 +50,7 @@ public class HomeController {
 				settings.getEnviromentSize()
 			)
 		);
+		
 		endTime = new Date();
 		logger.debug("End Setting EnvironmentVariables Time: " + endTime.getTime());
 		logger.debug("Setting EnvironmentVariables took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds");
@@ -67,7 +68,7 @@ public class HomeController {
 			startTime = new Date();
 			logger.debug("Generating Enviroment Fitness Targets: " + startTime.getTime());
 			
-			settings.setEnviromentFitnessTargets(MathUtil.generateBinaryMathTreeScores(settings.getEnvironmentVariables(), binaryMathTree));
+			settings.setEnviromentFitnessTargets(MathUtil.generateBinaryMathTreeFitness(settings.getEnvironmentVariables(), binaryMathTree));
 			
 			endTime = new Date();
 			logger.debug("End Generating Enviroment Fitness Targets: " + endTime.getTime());
@@ -85,7 +86,7 @@ public class HomeController {
 			startTime = new Date();
 			logger.debug("Caluclate Scores And Prune: " + startTime.getTime());
 			
-			ScoreGeneration.caluclateScoresAndPrune(seedGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
+			CalculateFitness.caluclateFitnessValuesAndPrune(seedGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 			
 			endTime = new Date();
 			logger.debug("Caluclate Scores And Prune: " + endTime.getTime());
@@ -100,7 +101,7 @@ public class HomeController {
 				
 				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
 				
-				ScoreGeneration.caluclateScoresAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
+				CalculateFitness.caluclateFitnessValuesAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 
 				
 				//free up memory

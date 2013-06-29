@@ -34,6 +34,7 @@ public class BinaryMathTreeParser  {
 		logger.trace("equation: " + equation);
 
 		String[] input = checkForValidityAndReturnInputAndSetVariableNames(equation, binaryMathTree);
+		
 		String[] output = ReversePolishNotation.infixToRPN(input);
 		
 	
@@ -68,6 +69,7 @@ public class BinaryMathTreeParser  {
 				if(!objects.isEmpty()){
 					treeNodeLeft = (TreeNode)objects.pop();
 				}
+				
 				
 				Operator operator = operatorStringToTreeNode(output);
 

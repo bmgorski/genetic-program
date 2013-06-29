@@ -17,15 +17,15 @@ import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Gene;
 import com.genetic.program.model.generation.Generation;
 
-public class ScoreGeneration {
+public class CalculateFitness {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MathUtil.class);
 	
-	public static void caluclateScoresAndPrune(Generation generation, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxVariance){
+	public static void caluclateFitnessValuesAndPrune(Generation generation, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxVariance){
 		
 		List<Future<Gene>> futures = new ArrayList<Future<Gene>>();
 		for(Gene gene: generation.getGenes()){
-			futures.add(actuallyCaluclateScoresAndPrune(gene, environmentVariables, enviromentFitnessTargets, maxVariance));
+			futures.add(actuallyCaluclateFitnessValueAndPrune(gene, environmentVariables, enviromentFitnessTargets, maxVariance));
 		}
 		
 		Iterator<Future<Gene>> iterator = futures.iterator();
@@ -64,10 +64,12 @@ public class ScoreGeneration {
 	}
 	
 	@Async
-	private static Future<Gene> actuallyCaluclateScoresAndPrune(final Gene gene, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxVariance) {
-		BigDecimal score = BigDecimal.ZERO;
+	private static Future<Gene> actuallyCaluclateFitnessValueAndPrune(final Gene gene, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxFitnessValue) {
+		BigDecimal fintnessValue = BigDecimal.ZERO;
 		try{
-			List<BigDecimal> results = MathUtil.generateBinaryMathTreeScores(environmentVariables, gene.getGenes());
+			
+			//TODO calculate one at a time so we can stop once we reach the maxFitnessValue
+			List<BigDecimal> results = MathUtil.generateBinaryMathTreeFitness(environmentVariables, gene.getGenes());
 			
 			
 			int count = 0;
@@ -78,24 +80,22 @@ public class ScoreGeneration {
 				addValue = addValue.abs();
 				logger.trace("addValue: " + addValue.toString());
 				
-				score = score.add(addValue);
-				logger.trace("Score: " + score.toString());
+				fintnessValue = fintnessValue.add(addValue);
+				logger.trace("Score: " + fintnessValue.toString());
 				count++;
 				
-				if(score.compareTo(maxVariance) == 1){
+				if(fintnessValue.compareTo(maxFitnessValue) == 1){
 					gene.setRemoveFromGeneration(true);
 					break;
 				}
 			}
 			
-			gene.setScore(score);
+			gene.setScore(fintnessValue);
 		}
 		catch(Exception e){
 			gene.setRemoveFromGeneration(true);
 		}
 		
-		
-			
 		return new AsyncResult<Gene>(gene);
 	}
 }
