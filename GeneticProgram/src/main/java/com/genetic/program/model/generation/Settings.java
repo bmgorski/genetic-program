@@ -10,7 +10,7 @@ public class Settings {
 	private BigDecimal quadraticA = new BigDecimal("2");
 	private BigDecimal quadraticB = BigDecimal.ZERO;
 	private Integer enviromentSize = 200;
-	private BigDecimal maxFitnessValue = new BigDecimal("1000");
+	private BigDecimal maxFitnessValue = new BigDecimal("10000");
 	
 	private List<BigDecimal> environmentVariables;
 	private List<BigDecimal> enviromentFitnessTargets;

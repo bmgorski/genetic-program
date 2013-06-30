@@ -25,7 +25,7 @@ import com.rits.cloning.Cloner;
 public class GenerationToGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	private static final int NUMBER_OF_MUTATIONS = 10;
+	private static final int NUMBER_OF_MUTATIONS = 5;
 	private static final int NUMBER_OF_CROSSOVERS = 2;
 	
 	private Cloner _cloner;
@@ -36,22 +36,26 @@ public class GenerationToGeneration {
 	
 	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt) {
 		Generation newGeneration = new Generation();
-
+		
+		int currentPlace = 0;
+		int oldGerationSize = oldGeneration.getGenes().size();
+		
 		for(Gene gene : oldGeneration.getGenes()){
 			for(int i = 0; i < NUMBER_OF_MUTATIONS; i++){
 				newGeneration.getGenes().add(mutateGene(_cloner.deepClone(gene), validOperators, minInt, maxInt));
 			}
 			
-//			for(int i = 0; i < NUMBER_OF_CROSSOVERS; i++){
-//				int crossOverWith = currentPlace;
-//				
-//				while(crossOverWith == currentPlace){
-//					crossOverWith = MathUtil.randomNumber(0, oldGerationSize - 1);
-//				}
-//				
-//				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith))));
-//			}
+			for(int i = 0; i < NUMBER_OF_CROSSOVERS; i++){
+				int crossOverWith = currentPlace;
+				
+				while(crossOverWith == currentPlace){
+					crossOverWith = MathUtil.randomNumber(0, oldGerationSize - 1);
+				}
+				
+				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith))));
+			}
 			
+			currentPlace++;
 		}
 		
 		
@@ -68,9 +72,31 @@ public class GenerationToGeneration {
 	private List<Gene> crossOverGenes(Gene gene1, Gene gene2) {
 		List<Gene> genes = new ArrayList<Gene>();
 		
+		//we will update the genes later so we can just add them now
+		genes.add(gene1);
+		genes.add(gene2);
 		
+		TreeNode treeNode1 = getCrossOverTreeNode(gene1.getBinaryMathTree());
+		TreeNode treeNode2 = getCrossOverTreeNode(gene2.getBinaryMathTree());
+		
+		Operator parent1 = (Operator)treeNode1.getParent();
+		Operator parent2 = (Operator)treeNode2.getParent();
+		
+		replaceParentChild(parent1, treeNode1, treeNode2);
+		replaceParentChild(parent2, treeNode2, treeNode1);
 		
 		return genes;
+	}
+	
+	
+	private static final double LOWEST_PECENT_CROSSOVER = .5;
+	private TreeNode getCrossOverTreeNode(BinaryMathTree binaryMathTree){
+		List<TreeNode> treeNodes = binaryMathTree.levelorder();
+		int treeSizeMinus1 = treeNodes.size() - 1;
+		
+		int returnIndex = MathUtil.randomNumber((int)(treeSizeMinus1 * LOWEST_PECENT_CROSSOVER), treeSizeMinus1);
+		
+		return treeNodes.get(returnIndex);
 	}
 
 	private Gene mutateGene(Gene gene, String[] validOperators, int minInt, int maxInt) {
@@ -88,12 +114,8 @@ public class GenerationToGeneration {
 			Operand newOperand  = randomConstantsAndVariablesGenerator(minInt, maxInt);
 			
 			Operator parentOperator = (Operator)currentOperand.getParent();
-			if(parentOperator.getLeftNode().equals(currentOperand)){
-				parentOperator.setTreeNodes(newOperand, parentOperator.getRightNode());
-			}
-			else if(parentOperator.getRightNode().equals(currentOperand)){
-				parentOperator.setTreeNodes(newOperand, parentOperator.getLeftNode());
-			}
+			
+			replaceParentChild(parentOperator, currentOperand, newOperand);
 		}
 		else{
 			Operator currentOperator = (Operator) nodeToChange;
@@ -113,12 +135,7 @@ public class GenerationToGeneration {
 			Operator parentOperator = (Operator)currentOperator.getParent();
 			
 			if(parentOperator != null){
-				if(parentOperator.getLeftNode().equals(currentOperator)){
-					parentOperator.setTreeNodes(newOperator, parentOperator.getRightNode());
-				}
-				else if(parentOperator.getRightNode().equals(currentOperator)){
-					parentOperator.setTreeNodes(newOperator, parentOperator.getLeftNode());
-				}
+				replaceParentChild(parentOperator, currentOperator, newOperator);
 			}
 			else{
 				binaryMathTree.setRootNode(newOperator);
@@ -143,5 +160,14 @@ public class GenerationToGeneration {
 		}
 		
 		return operand;
+	}
+	
+	private void replaceParentChild(Operator parentOperator, TreeNode currentTreeNode, TreeNode newTreeNode){
+		if(parentOperator.getLeftNode().equals(currentTreeNode)){
+			parentOperator.setTreeNodes(newTreeNode, parentOperator.getRightNode());
+		}
+		else if(parentOperator.getRightNode().equals(currentTreeNode)){
+			parentOperator.setTreeNodes(newTreeNode, parentOperator.getLeftNode());
+		}
 	}
 }
