@@ -1,11 +1,13 @@
 package com.genetic.program.tree;
 
-public abstract class Operator  implements TreeNode {
+public abstract class Operator  extends TreeNode {
 	private TreeNode[] threeNode = new TreeNode[2];
 	
 	public void setTreeNodes(TreeNode treeNode1, TreeNode treeNode2){
 		this.threeNode[0] = treeNode1;
+		treeNode1.setParent(this);
 		this.threeNode[1] = treeNode2;
+		treeNode2.setParent(this);
 	}
 	
 	public TreeNode getLeftNode(){
@@ -30,6 +32,7 @@ public abstract class Operator  implements TreeNode {
 
 		return numberOfChildren + getLeftNode().getNumberOfChildren() + getRightNode().getNumberOfChildren();
 	}
+	
 	
 	public abstract String operatorStringEquivalant();
 }

@@ -96,20 +96,19 @@ public class HomeController {
 			int generationNumber = 0;
 			Generation oldGeneration = seedGeneration;
 			
-			while(!oldGeneration.getGenes().get(0).getScore().equals(BigDecimal.ZERO)){
-				logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getScore().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");				
+			while((oldGeneration.getGenes().get(0).getFitnessValue().compareTo(BigDecimal.ZERO)) != 0){
+				logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");				
 				
 				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
 				
 				CalculateFitness.caluclateFitnessValuesAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
-
-				
-				//free up memory
-				oldGeneration = null;
 				
 				oldGeneration = newGeneration;
 				generationNumber++;
 			}
+			
+			logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");				
+
 			
 			logger.debug("Yeah we won!!!");
 

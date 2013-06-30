@@ -5,29 +5,21 @@ import java.math.BigDecimal;
 import com.genetic.program.tree.BinaryMathTree;
 
 public class Gene implements Comparable<Gene> {
-	private BinaryMathTree genes;
-	private BigDecimal score = BigDecimal.ZERO;
+	private BinaryMathTree binaryMathTree;
+	private BigDecimal fitnessValue = BigDecimal.ZERO;
 	private boolean removeFromGeneration = false;
 
-	public BigDecimal getScore() {
-		return score;
+	public BigDecimal getFitnessValue() {
+		return fitnessValue;
 	}
 
-	public void setScore(BigDecimal score) {
-		this.score = score;
-	}
-
-	public BinaryMathTree getGenes() {
-		return genes;
-	}
-
-	public void setGenes(BinaryMathTree genes) {
-		this.genes = genes;
+	public void setFitnessValue(BigDecimal score) {
+		this.fitnessValue = score;
 	}
 
 	@Override
 	public int compareTo(Gene o) {
-		return this.getScore().compareTo(o.getScore());
+		return this.getFitnessValue().compareTo(o.getFitnessValue());
 	}
 
 	public boolean isRemoveFromGeneration() {
@@ -36,5 +28,13 @@ public class Gene implements Comparable<Gene> {
 
 	public void setRemoveFromGeneration(boolean removeFromGeneration) {
 		this.removeFromGeneration = removeFromGeneration;
+	}
+
+	public BinaryMathTree getBinaryMathTree() {
+		return binaryMathTree;
+	}
+
+	public void setBinaryMathTree(BinaryMathTree binaryMathTree) {
+		this.binaryMathTree = binaryMathTree;
 	}
 }

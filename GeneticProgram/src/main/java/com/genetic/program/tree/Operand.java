@@ -1,6 +1,6 @@
 package com.genetic.program.tree;
 
-public abstract class Operand implements TreeNode {
+public abstract class Operand extends TreeNode {
 	private double leafValue;
 
 	public double getLeafValue() {

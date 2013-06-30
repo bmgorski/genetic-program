@@ -1,10 +1,14 @@
 package com.genetic.program.util;
 
+import java.io.ObjectInputStream.GetField;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -29,7 +33,8 @@ public class CalculateFitness {
 		}
 		
 		Iterator<Future<Gene>> iterator = futures.iterator();
-		generation.setGenes(new ArrayList<Gene>());
+		
+		Set<Gene> unqueueGenes = new TreeSet<Gene>();
 		
 		while(iterator.hasNext()){
 			try {
@@ -41,7 +46,7 @@ public class CalculateFitness {
 					iterator.remove();
 				}
 				else{
-					generation.getGenes().add(gene);
+					unqueueGenes.add(gene);
 				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -52,13 +57,21 @@ public class CalculateFitness {
 			}
 		}
 		
-		Collections.sort(generation.getGenes());
+		List<Gene> genes = new ArrayList<Gene>();
+		genes.addAll(unqueueGenes);
+		
+		generation.setGenes(genes);
+		
+		
+		
+		
+		
 		
 		logger.trace("Number of genes remaining: " + generation.getGenes().size());
 		
 		if(logger.isTraceEnabled()){
 			for(Gene gene: generation.getGenes()){
-				logger.trace(gene.getScore().toString());
+				logger.trace(gene.getFitnessValue().toString());
 			}
 		}
 	}
@@ -69,7 +82,7 @@ public class CalculateFitness {
 		try{
 			
 			//TODO calculate one at a time so we can stop once we reach the maxFitnessValue
-			List<BigDecimal> results = MathUtil.generateBinaryMathTreeFitness(environmentVariables, gene.getGenes());
+			List<BigDecimal> results = MathUtil.generateBinaryMathTreeFitness(environmentVariables, gene.getBinaryMathTree());
 			
 			
 			int count = 0;
@@ -90,7 +103,7 @@ public class CalculateFitness {
 				}
 			}
 			
-			gene.setScore(fintnessValue);
+			gene.setFitnessValue(fintnessValue);
 		}
 		catch(Exception e){
 			gene.setRemoveFromGeneration(true);

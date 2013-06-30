@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.genetic.program.math.MathUtil;
 
 
-public class DivisionNode extends Operator implements TreeNode  {
+public class DivisionNode extends Operator {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MathUtil.class);
 	

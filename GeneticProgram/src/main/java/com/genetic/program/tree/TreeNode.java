@@ -2,7 +2,7 @@ package com.genetic.program.tree;
 
 import java.util.HashMap;
 
-public interface TreeNode {
+public abstract class TreeNode {
 	/** Node id for variable nodes */
 	public static final int VARIABLE_NODE = 1;
 	/** Node id for constant nodes */
@@ -16,9 +16,20 @@ public interface TreeNode {
 	/** Node id for division nodes */
 	public static final int DIVISION_NODE = 6;
 
-	public int nodeType();
+	private TreeNode parent = null;
 	
-	public double getValue(HashMap<String, Double> variables);
+	public abstract int nodeType();
 	
-	public int getNumberOfChildren();
+	public abstract double getValue(HashMap<String, Double> variables);
+	
+	public abstract int getNumberOfChildren();
+
+	public TreeNode getParent() {
+		return parent;
+	}
+
+	public void setParent(TreeNode parent) {
+		this.parent = parent;
+	}
+	
 }

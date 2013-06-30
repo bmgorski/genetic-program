@@ -52,7 +52,7 @@ public class SeedGeneration {
 		logger.trace("Expression: " + expression);
 		
 		try {
-			gene.setGenes(BinaryMathTreeParser.stringEquationToBinaryMathTree(expression));
+			gene.setBinaryMathTree(BinaryMathTreeParser.stringEquationToBinaryMathTree(expression));
 		} catch (BinaryMathTreeException e) {
 			e.printStackTrace();
 		}
