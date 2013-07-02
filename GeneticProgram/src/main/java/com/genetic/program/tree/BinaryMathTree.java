@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ public class BinaryMathTree {
 		this.rootNode = rootNode;
 	}
 
-	public double getValue(HashMap<String, Double> variables){
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables){
 		return rootNode.getValue(variables);
 	}
 

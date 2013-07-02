@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 
@@ -11,8 +12,8 @@ public class MultiplicationNode extends Operator {
 	}
 
 	@Override
-	public double getValue(HashMap<String, Double> variables) {
-		return this.getLeftNode().getValue(variables) * this.getRightNode().getValue(variables);
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables) {
+		return this.getLeftNode().getValue(variables).multiply(this.getRightNode().getValue(variables));
 	}
 	
 	@Override

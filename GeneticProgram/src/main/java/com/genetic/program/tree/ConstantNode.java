@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 
@@ -11,7 +12,7 @@ public class ConstantNode extends Operand  {
 	}
 
 	@Override
-	public double getValue(HashMap<String, Double> variables) {
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables) {
 		return this.getLeafValue();
 	}
 }

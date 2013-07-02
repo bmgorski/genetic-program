@@ -13,7 +13,8 @@ public class MathUtil {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MathUtil.class);
 	
-	public static final int APPLICATION_SCALE = 200;
+	public static final int APPLICATION_SCALE = 5;
+	public static final int APPLICATION_ROUNDING = BigDecimal.ROUND_DOWN;
 	public static final int ENVIRONMENT_MULTIPLIER = 10;
 
 	/**
@@ -44,13 +45,12 @@ public class MathUtil {
 	 * @return xVertex
 	 */
 	public static BigDecimal xVertex(final BigDecimal a, final BigDecimal b){
-		BigDecimal m = new BigDecimal("2");
-		m.setScale(APPLICATION_SCALE);
+		BigDecimal m = stringToBigDecimalWithScale("2");
 		
 		BigDecimal b2 = b.negate();
 		BigDecimal a2 = a.multiply(m);
 		
-		return b2.divide(a2, APPLICATION_SCALE, BigDecimal.ROUND_DOWN);
+		return b2.divide(a2, APPLICATION_SCALE, APPLICATION_ROUNDING);
 	}
 
 	public static List<BigDecimal> calculateEnvironmentVariables(BigDecimal xVertex, Integer enviromentSize) {
@@ -60,7 +60,7 @@ public class MathUtil {
 		int numberOfPairs = enviromentSize/2;
 		for(int i = 1; i <= numberOfPairs; i++){
 			Integer thisMultiplier = ENVIRONMENT_MULTIPLIER * i;
-			BigDecimal thisMultiplierBD = new BigDecimal(thisMultiplier.toString());
+			BigDecimal thisMultiplierBD = stringToBigDecimalWithScale(thisMultiplier.toString());
 			
 			logger.trace("environmentVariables: " + environmentVariables);
 			
@@ -76,17 +76,17 @@ public class MathUtil {
 	}
 	
 	public static double stringToDouble(String doubleString){
-		return new BigDecimal(doubleString).doubleValue();
+		return MathUtil.stringToBigDecimalWithScale(doubleString).doubleValue();
 	}
 	
 	public static List<BigDecimal> generateBinaryMathTreeFitness(List<BigDecimal> environments, BinaryMathTree binaryMathTree){
 		List<BigDecimal> enviromnentTargets = new ArrayList<BigDecimal>();
 		
 		for(BigDecimal bigDecimal : environments){
-			HashMap<String, Double> variables = new HashMap<String, Double>();
-			variables.put("x", bigDecimal.doubleValue());
+			HashMap<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+			variables.put("x", bigDecimal);
 			
-			BigDecimal enviromnentTarget = new BigDecimal(binaryMathTree.getValue(variables));
+			BigDecimal enviromnentTarget = binaryMathTree.getValue(variables);
 			
 			logger.trace(binaryMathTree.getRootNode().nodeType() + "");
 			
@@ -98,5 +98,12 @@ public class MathUtil {
 		logger.trace("binaryMathTreeScores: " + enviromnentTargets.size());
 		
 		return enviromnentTargets;
+	}
+	
+	public static BigDecimal stringToBigDecimalWithScale(String number){
+		BigDecimal bigDecimal = new BigDecimal(number);
+		bigDecimal.setScale(APPLICATION_SCALE);
+		
+		return bigDecimal;
 	}
 }

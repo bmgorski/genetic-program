@@ -2,11 +2,12 @@ package com.genetic.program.model.generation;
 
 import java.math.BigDecimal;
 
+import com.genetic.program.math.MathUtil;
 import com.genetic.program.tree.BinaryMathTree;
 
 public class Gene implements Comparable<Gene> {
 	private BinaryMathTree binaryMathTree;
-	private BigDecimal fitnessValue = BigDecimal.ZERO;
+	private BigDecimal fitnessValue = MathUtil.stringToBigDecimalWithScale("0");
 	private boolean removeFromGeneration = false;
 
 	public BigDecimal getFitnessValue() {

@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public abstract class TreeNode {
@@ -20,7 +21,7 @@ public abstract class TreeNode {
 	
 	public abstract int nodeType();
 	
-	public abstract double getValue(HashMap<String, Double> variables);
+	public abstract BigDecimal getValue(HashMap<String, BigDecimal> variables);
 	
 	public abstract int getNumberOfChildren();
 

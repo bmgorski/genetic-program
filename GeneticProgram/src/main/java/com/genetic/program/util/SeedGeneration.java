@@ -1,16 +1,10 @@
 package com.genetic.program.util;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 
 import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Gene;
@@ -25,51 +19,39 @@ public class SeedGeneration {
 	public static Generation getSeeds(final SeedGenerationSettings seedGenerationSettings, final String[] validOperators) {
 		Generation generation = new Generation();
 		
-		List<Future<Gene>> genes = new ArrayList<Future<Gene>>();
 		for(int i = 0; i < seedGenerationSettings.getNumberOfSeeds(); i++){
-			genes.add(generateGene(seedGenerationSettings, validOperators));
-		}
-		
-		for(Future<Gene> future: genes){
+			logger.trace("Start Expression " + i + ": ");
+			String expression = generateFunction(seedGenerationSettings, validOperators);
+			logger.trace("End Expression " + i + ": " + expression);
+			
+			Gene gene = new Gene();
+			
 			try {
-				generation.getGenes().add(future.get());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
+				gene.setBinaryMathTree(BinaryMathTreeParser.stringEquationToBinaryMathTree(expression));
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			generation.getGenes().add(gene);
+			
+			
 		}
 		
 		return generation;
 	}
-
-	@Async
-	private static Future<Gene> generateGene(final SeedGenerationSettings seedGenerationSettings, final String[] validOperators) {
-		Gene gene = new Gene();
-		
-		String expression = generateFunction(seedGenerationSettings, validOperators);
-		
-		logger.trace("Expression: " + expression);
-		
-		try {
-			gene.setBinaryMathTree(BinaryMathTreeParser.stringEquationToBinaryMathTree(expression));
-		} catch (BinaryMathTreeException e) {
-			e.printStackTrace();
-		}
-			
-		return	new AsyncResult<Gene>(gene);
-	}
 	
 	private static String generateFunction(SeedGenerationSettings seedGenerationSettings, String[] validOperators){
 		StringBuilder stringBuilder = new StringBuilder();
+		
 		int numberOfOperators = MathUtil.randomNumber(seedGenerationSettings.getMinNumberOfOperators(), seedGenerationSettings.getMaxNumberOfOperators());
+		
 		String[] constantsAndVariables = randomConstantsAndVariablesGenerator(numberOfOperators + 1, seedGenerationSettings.getMinInt(), seedGenerationSettings.getMaxInt());
 		
+
 		int numberOfParentheses = MathUtil.randomNumber(seedGenerationSettings.getMinNumberOfParentheses(), seedGenerationSettings.getMaxNumberOfParentheses());
 		
 
 		 
-		
 		for(int i = 0; i < numberOfOperators; i++){
 			
 			if(i == 0){
@@ -84,6 +66,7 @@ public class SeedGeneration {
 		
 		
 		String returnValue = stringBuilder.toString();
+		
 		
 		if(numberOfParentheses > 0){
 			Map<Integer, String> parentheses = new TreeMap<Integer, String>();
@@ -113,6 +96,7 @@ public class SeedGeneration {
 				}
 			}
 		
+			
 			StringBuilder stringBuilder2 = new StringBuilder();
 			
 			int lastValue = 0;
@@ -133,15 +117,17 @@ public class SeedGeneration {
 			returnValue = stringBuilder2.toString();
 		}
 	
-
-		
 		return returnValue;
 	}
 	
 	private static String[] randomConstantsAndVariablesGenerator(int numberOFVariableAndConstancts, int minInt,
 			int maxInt) {
+		
 		String[] constantsAndVariables = new String[numberOFVariableAndConstancts];
 		int numberOfConstants = MathUtil.randomNumber(1, 3);
+		if(numberOfConstants > numberOFVariableAndConstancts){
+			numberOfConstants = numberOFVariableAndConstancts;
+		}
 				
 		int countNumberOfConstantsAdded = 0;
 		while(numberOfConstants > countNumberOfConstantsAdded){
@@ -152,7 +138,7 @@ public class SeedGeneration {
 				countNumberOfConstantsAdded++;
 			}
 		}
-		
+
 		for(int i = 0; i < constantsAndVariables.length; i++){
 			if(constantsAndVariables[i] == null){
 				constantsAndVariables[i] = MathUtil.randomNumber(minInt, maxInt).toString();

@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -18,12 +19,12 @@ public class DivisionNode extends Operator {
 	}
 
 	@Override
-	public double getValue(HashMap<String, Double> variables) {
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables) {
 		logger.trace("Doing Division");
 		logger.trace("Left Node: " + this.getLeftNode().nodeType());
 		logger.trace("Right Node: " + this.getRightNode().nodeType());
 		
-		return this.getLeftNode().getValue(variables) / this.getRightNode().getValue(variables);
+		return this.getLeftNode().getValue(variables).divide(this.getRightNode().getValue(variables), MathUtil.APPLICATION_ROUNDING);
 	}
 	
 	@Override

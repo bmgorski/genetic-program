@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class VariableNode extends Operand  {
@@ -11,7 +12,7 @@ public class VariableNode extends Operand  {
 	}
 
 	@Override
-	public double getValue(HashMap<String, Double> variables) {
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables) {
 		return variables.get(variableName);
 	}
 

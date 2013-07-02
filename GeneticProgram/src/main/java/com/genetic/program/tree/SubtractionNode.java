@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -17,16 +18,16 @@ public class SubtractionNode extends Operator  {
 
 	@Override
 	//sometimes the right node can be null if that is the case just return the negative value of the left node
-	public double getValue(HashMap<String, Double> variables) {
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables) {
 		if(getLeftNode() == null){
-			return -this.getRightNode().getValue(variables);
+			return this.getRightNode().getValue(variables).negate();
 		}
 		
 		logger.trace("Doing Subtraction");
 		logger.trace("Left Node: " + this.getLeftNode().nodeType());
 		logger.trace("Right Node: " + this.getRightNode().nodeType());
 		
-		return this.getLeftNode().getValue(variables) - this.getRightNode().getValue(variables);
+		return this.getLeftNode().getValue(variables).subtract(this.getRightNode().getValue(variables));
 	}
 	
 	@Override

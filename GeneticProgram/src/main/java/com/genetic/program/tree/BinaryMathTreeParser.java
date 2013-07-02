@@ -85,7 +85,7 @@ public class BinaryMathTreeParser  {
 			//we know it is a number aka a constant
 			else{
 				ConstantNode constantNode = new ConstantNode();
-				constantNode.setLeafValue(MathUtil.stringToDouble(output));
+				constantNode.setLeafValue(MathUtil.stringToBigDecimalWithScale(output));
 				objects.push(constantNode);
 			}
 			

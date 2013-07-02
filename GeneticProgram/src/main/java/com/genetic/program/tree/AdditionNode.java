@@ -1,5 +1,6 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public class AdditionNode extends Operator {
 
 	@Override
 	//sometimes the right node can be null if that is the case just return the value of the left node
-	public double getValue(HashMap<String, Double> variables) {
+	public BigDecimal getValue(HashMap<String, BigDecimal> variables) {
 		logger.trace("Doing Addition");
 		logger.trace("Left Node: " + this.getLeftNode().nodeType());
 		logger.trace("Right Node: " + this.getRightNode().nodeType());
@@ -26,7 +27,7 @@ public class AdditionNode extends Operator {
 		if(getLeftNode() == null){
 			return this.getRightNode().getValue(variables);
 		}
-		return this.getLeftNode().getValue(variables) + this.getRightNode().getValue(variables);
+		return this.getLeftNode().getValue(variables).add(this.getRightNode().getValue(variables));
 	}
 	
 	@Override

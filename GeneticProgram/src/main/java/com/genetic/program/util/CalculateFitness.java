@@ -22,43 +22,43 @@ import com.genetic.program.model.generation.Gene;
 import com.genetic.program.model.generation.Generation;
 
 public class CalculateFitness {
+	
+	private static final int MAX_NUMBER_AFTER_PRUNNING = 500;
 	private static final Logger logger = LoggerFactory
 			.getLogger(MathUtil.class);
 	
 	public static void caluclateFitnessValuesAndPrune(Generation generation, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxVariance){
 		
-		List<Future<Gene>> futures = new ArrayList<Future<Gene>>();
-		for(Gene gene: generation.getGenes()){
-			futures.add(actuallyCaluclateFitnessValueAndPrune(gene, environmentVariables, enviromentFitnessTargets, maxVariance));
-		}
-		
-		Iterator<Future<Gene>> iterator = futures.iterator();
-		
 		Set<Gene> unqueueGenes = new TreeSet<Gene>();
 		
-		while(iterator.hasNext()){
-			try {
-				Future<Gene> future = iterator.next();
-			
-				Gene gene = future.get();
-			
-				if(gene.isRemoveFromGeneration()){
-					iterator.remove();
-				}
-				else{
-					unqueueGenes.add(gene);
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		for(Gene gene: generation.getGenes()){		
+			gene = actuallyCaluclateFitnessValueAndPrune(gene, environmentVariables, enviromentFitnessTargets, maxVariance);
+		
+			if(gene.isRemoveFromGeneration()){
+				
+			}
+			else{
+				unqueueGenes.add(gene);
 			}
 		}
 		
 		List<Gene> genes = new ArrayList<Gene>();
 		genes.addAll(unqueueGenes);
+		
+		
+		if(genes.size() > MAX_NUMBER_AFTER_PRUNNING){
+			Iterator<Gene> i = genes.iterator();
+			int count = 1;
+			while(i.hasNext()){
+				i.next();
+				
+				if(count > MAX_NUMBER_AFTER_PRUNNING){
+					i.remove();
+				}
+				
+				count++;
+			}
+		}
 		
 		generation.setGenes(genes);
 		
@@ -76,9 +76,8 @@ public class CalculateFitness {
 		}
 	}
 	
-	@Async
-	private static Future<Gene> actuallyCaluclateFitnessValueAndPrune(final Gene gene, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxFitnessValue) {
-		BigDecimal fintnessValue = BigDecimal.ZERO;
+	private static Gene actuallyCaluclateFitnessValueAndPrune(final Gene gene, List<BigDecimal> environmentVariables, List<BigDecimal> enviromentFitnessTargets, BigDecimal maxFitnessValue) {
+		BigDecimal fintnessValue = MathUtil.stringToBigDecimalWithScale("0");
 		try{
 			
 			//TODO calculate one at a time so we can stop once we reach the maxFitnessValue
@@ -86,12 +85,12 @@ public class CalculateFitness {
 			
 			
 			int count = 0;
-			for(BigDecimal result : results){
-				logger.trace("result: " + result);
-				logger.trace("enviromentFitnessTarget: " + (result.subtract(enviromentFitnessTargets.get(count))).abs());
+			for(BigDecimal result : results){				
 				BigDecimal addValue = result.subtract(enviromentFitnessTargets.get(count));
+				
 				addValue = addValue.abs();
-				logger.trace("addValue: " + addValue.toString());
+				
+
 				
 				fintnessValue = fintnessValue.add(addValue);
 				logger.trace("Score: " + fintnessValue.toString());
@@ -109,6 +108,6 @@ public class CalculateFitness {
 			gene.setRemoveFromGeneration(true);
 		}
 		
-		return new AsyncResult<Gene>(gene);
+		return gene;
 	}
 }

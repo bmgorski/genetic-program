@@ -25,8 +25,8 @@ import com.rits.cloning.Cloner;
 public class GenerationToGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	private static final int NUMBER_OF_MUTATIONS = 5;
-	private static final int NUMBER_OF_CROSSOVERS = 2;
+	private static final int NUMBER_OF_MUTATIONS = 1;
+	private static final int NUMBER_OF_CROSSOVERS = 1;
 	
 	private Cloner _cloner;
 	
@@ -34,7 +34,7 @@ public class GenerationToGeneration {
 		this._cloner = cloner;
 	}
 	
-	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt) {
+	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt, int maxFunctionSize) {
 		Generation newGeneration = new Generation();
 		
 		int currentPlace = 0;
@@ -52,7 +52,7 @@ public class GenerationToGeneration {
 					crossOverWith = MathUtil.randomNumber(0, oldGerationSize - 1);
 				}
 				
-				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith))));
+				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith)), maxFunctionSize));
 			}
 			
 			currentPlace++;
@@ -66,18 +66,19 @@ public class GenerationToGeneration {
 	 * 
 	 * @param gene1
 	 * @param gene2
+	 * @param maxFunctionSize 
 	 * @returns {@link List} of gene1 and gene2 after a crossover
 	 * 
 	 */
-	private List<Gene> crossOverGenes(Gene gene1, Gene gene2) {
+	private List<Gene> crossOverGenes(Gene gene1, Gene gene2, int maxFunctionSize) {
 		List<Gene> genes = new ArrayList<Gene>();
 		
 		//we will update the genes later so we can just add them now
 		genes.add(gene1);
 		genes.add(gene2);
 		
-		TreeNode treeNode1 = getCrossOverTreeNode(gene1.getBinaryMathTree());
-		TreeNode treeNode2 = getCrossOverTreeNode(gene2.getBinaryMathTree());
+		TreeNode treeNode1 = getCrossOverTreeNode(gene1.getBinaryMathTree(), maxFunctionSize);
+		TreeNode treeNode2 = getCrossOverTreeNode(gene2.getBinaryMathTree(), maxFunctionSize - treeNode1.getNumberOfChildren());
 		
 		Operator parent1 = (Operator)treeNode1.getParent();
 		Operator parent2 = (Operator)treeNode2.getParent();
@@ -89,12 +90,19 @@ public class GenerationToGeneration {
 	}
 	
 	
-	private static final double LOWEST_PECENT_CROSSOVER = .5;
-	private TreeNode getCrossOverTreeNode(BinaryMathTree binaryMathTree){
+	private static final double LOWEST_PECENT_CROSSOVER = .3;
+	private TreeNode getCrossOverTreeNode(BinaryMathTree binaryMathTree, int maxFunctionSize){
 		List<TreeNode> treeNodes = binaryMathTree.levelorder();
-		int treeSizeMinus1 = treeNodes.size() - 1;
+		int treeSize = treeNodes.size();
 		
-		int returnIndex = MathUtil.randomNumber((int)(treeSizeMinus1 * LOWEST_PECENT_CROSSOVER), treeSizeMinus1);
+		int returnIndex = 0;
+		int numberOfChildren = 0;
+		do{
+			returnIndex = MathUtil.randomNumber((int)(treeSize * LOWEST_PECENT_CROSSOVER + 1), treeSize - 1);
+			numberOfChildren = treeNodes.get(returnIndex).getNumberOfChildren();
+		}
+		while(numberOfChildren > maxFunctionSize);
+				
 		
 		return treeNodes.get(returnIndex);
 	}
@@ -156,7 +164,7 @@ public class GenerationToGeneration {
 		}
 		else{
 			operand = new ConstantNode();
-			operand.setLeafValue(MathUtil.stringToDouble(MathUtil.randomNumber(minInt, maxInt).toString()));
+			operand.setLeafValue(MathUtil.stringToBigDecimalWithScale(MathUtil.randomNumber(minInt, maxInt).toString()));
 		}
 		
 		return operand;
