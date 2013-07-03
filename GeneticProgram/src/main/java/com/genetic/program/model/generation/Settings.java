@@ -7,7 +7,7 @@ import com.genetic.program.math.MathUtil;
 
 public class Settings {
 	private SeedGenerationSettings seedGenerationSettings = new SeedGenerationSettings();
-	private String targetFunction = "(2*x*x-1)/2";
+	private String targetFunction = "(2*x*x-1)/3";
 	
 	private BigDecimal quadraticA = MathUtil.stringToBigDecimalWithScale("2");
 	private BigDecimal quadraticB = MathUtil.stringToBigDecimalWithScale("0");

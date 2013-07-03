@@ -97,9 +97,13 @@ public class HomeController {
 			Generation oldGeneration = seedGeneration;
 			
 			while((oldGeneration.getGenes().get(0).getFitnessValue().compareTo(MathUtil.stringToBigDecimalWithScale("0"))) != 0){
-				logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");				
+				logger.debug("Generation " + generationNumber + " " +
+						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " " +
+						"and had " + oldGeneration.getGenes().size() + 
+						" genes left in the gene pool" +
+						" there size of the tree was: ");				
 				
-				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt(), (settings.getSeedGenerationSettings().getMaxNumberOfOperators() + 2)*2);
+				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
 				
 				CalculateFitness.caluclateFitnessValuesAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 				

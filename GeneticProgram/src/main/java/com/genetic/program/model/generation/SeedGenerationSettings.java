@@ -2,7 +2,7 @@ package com.genetic.program.model.generation;
 
 public class SeedGenerationSettings {
 	private int numberOfSeeds = 10000;
-	private int maxNumberOfOperators = 10;
+	private int maxNumberOfOperators = 5;
 	private int minNumberOfOperators = 1;
 	private int maxNumberOfParentheses = 1;
 	private int minNumberOfParentheses = 0;

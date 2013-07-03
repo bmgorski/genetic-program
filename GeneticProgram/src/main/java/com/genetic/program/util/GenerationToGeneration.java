@@ -25,7 +25,7 @@ import com.rits.cloning.Cloner;
 public class GenerationToGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	private static final int NUMBER_OF_MUTATIONS = 1;
+	private static final int NUMBER_OF_MUTATIONS = 5;
 	private static final int NUMBER_OF_CROSSOVERS = 1;
 	
 	private Cloner _cloner;
@@ -34,7 +34,7 @@ public class GenerationToGeneration {
 		this._cloner = cloner;
 	}
 	
-	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt, int maxFunctionSize) {
+	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt) {
 		Generation newGeneration = new Generation();
 		
 		int currentPlace = 0;
@@ -52,7 +52,7 @@ public class GenerationToGeneration {
 					crossOverWith = MathUtil.randomNumber(0, oldGerationSize - 1);
 				}
 				
-				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith)), maxFunctionSize));
+				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith))));
 			}
 			
 			currentPlace++;
@@ -70,12 +70,17 @@ public class GenerationToGeneration {
 	 * @returns {@link List} of gene1 and gene2 after a crossover
 	 * 
 	 */
-	private List<Gene> crossOverGenes(Gene gene1, Gene gene2, int maxFunctionSize) {
+	private List<Gene> crossOverGenes(Gene gene1, Gene gene2) {
 		List<Gene> genes = new ArrayList<Gene>();
 		
 		//we will update the genes later so we can just add them now
 		genes.add(gene1);
 		genes.add(gene2);
+		
+		int maxFunctionSize = gene1.getBinaryMathTree().size();
+		if(maxFunctionSize < gene2.getBinaryMathTree().size()){
+			maxFunctionSize = gene2.getBinaryMathTree().size();
+		}
 		
 		TreeNode treeNode1 = getCrossOverTreeNode(gene1.getBinaryMathTree(), maxFunctionSize);
 		TreeNode treeNode2 = getCrossOverTreeNode(gene2.getBinaryMathTree(), maxFunctionSize - treeNode1.getNumberOfChildren());
