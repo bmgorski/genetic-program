@@ -10,7 +10,6 @@ import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Gene;
 import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.SeedGenerationSettings;
-import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
 
 public class SeedGeneration {

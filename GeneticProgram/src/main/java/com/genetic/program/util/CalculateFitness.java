@@ -1,22 +1,13 @@
 package com.genetic.program.util;
 
-import java.io.ObjectInputStream.GetField;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
-
 import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Gene;
 import com.genetic.program.model.generation.Generation;

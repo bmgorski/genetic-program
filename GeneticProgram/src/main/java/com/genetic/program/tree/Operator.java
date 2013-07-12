@@ -22,15 +22,15 @@ public abstract class Operator  extends TreeNode {
 	public int getNumberOfChildren() {
 		int numberOfChildren = 0;
 		
-		if(getLeftNode() != null){
+		if(this.getLeftNode() != null){
 			numberOfChildren++;
 		}
 		
-		if (getRightNode() != null) {
+		if (this.getRightNode() != null) {
 			numberOfChildren++;
 		}
 
-		return numberOfChildren + getLeftNode().getNumberOfChildren() + getRightNode().getNumberOfChildren();
+		return numberOfChildren + this.getLeftNode().getNumberOfChildren() + this.getRightNode().getNumberOfChildren();
 	}
 	
 	

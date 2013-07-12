@@ -2,14 +2,12 @@ package com.genetic.program.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.genetic.program.controller.HomeController;
 import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Gene;
 import com.genetic.program.model.generation.Generation;
@@ -25,7 +23,7 @@ import com.rits.cloning.Cloner;
 public class GenerationToGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(GenerationToGeneration.class);
 	
-	private static final int NUMBER_OF_MUTATIONS = 5;
+	private static final int NUMBER_OF_MUTATIONS = 20;
 	private static final int NUMBER_OF_CROSSOVERS = 1;
 	
 	private Cloner _cloner;
@@ -34,7 +32,7 @@ public class GenerationToGeneration {
 		this._cloner = cloner;
 	}
 	
-	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt, int maxTreeSizeLength) {
+	public Generation populate(Generation oldGeneration, String[] validOperators, int minInt, int maxInt) {
 		Generation newGeneration = new Generation();
 		
 		int currentPlace = 0;
@@ -51,8 +49,16 @@ public class GenerationToGeneration {
 				while(crossOverWith == currentPlace){
 					crossOverWith = MathUtil.randomNumber(0, oldGerationSize - 1);
 				}
+				Gene gene1 = gene;
+				Gene gene2 = oldGeneration.getGenes().get(crossOverWith);
 				
-				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene), _cloner.deepClone(oldGeneration.getGenes().get(crossOverWith)), maxTreeSizeLength));
+				logger.trace("gene1 Size: " + gene1.getBinaryMathTree().size());
+				logger.trace("gene2 Size: " + gene2.getBinaryMathTree().size());
+				
+				logger.trace("gene1 level order size: " + gene1.getBinaryMathTree().levelorder().size());
+				logger.trace("gene2 level order size: " + gene2.getBinaryMathTree().levelorder().size());
+				
+				newGeneration.getGenes().addAll(crossOverGenes(_cloner.deepClone(gene1), _cloner.deepClone(gene1)));
 			}
 			
 			currentPlace++;
@@ -70,15 +76,14 @@ public class GenerationToGeneration {
 	 * @returns {@link List} of gene1 and gene2 after a crossover
 	 * 
 	 */
-	private List<Gene> crossOverGenes(Gene gene1, Gene gene2, int maxTreeSizeLength) {
+	private List<Gene> crossOverGenes(Gene gene1, Gene gene2) {
 		List<Gene> genes = new ArrayList<Gene>();
 		
 		//we will update the genes later so we can just add them now
 		genes.add(gene1);
 		genes.add(gene2);
-				
+		
 		TreeNode treeNode1 = getCrossOverTreeNode(gene1.getBinaryMathTree(), false, 4);
-		logger.debug(treeNode1.getNumberOfChildren() + "");
 		TreeNode treeNode2 = getCrossOverTreeNode(gene2.getBinaryMathTree(), true, treeNode1.getNumberOfChildren());
 		
 		Operator parent1 = (Operator)treeNode1.getParent();
@@ -103,8 +108,7 @@ public class GenerationToGeneration {
 		else{
 			returnIndex = treeSize - MathUtil.randomNumber(1, targetSize);
 		}
-				
-		logger.debug("returnIndex: " + returnIndex + " - TreeNode size: " + treeSize);
+		
 		return treeNodes.get(returnIndex);
 	}
 
@@ -172,11 +176,17 @@ public class GenerationToGeneration {
 	}
 	
 	private void replaceParentChild(Operator parentOperator, TreeNode currentTreeNode, TreeNode newTreeNode){
-		if(parentOperator.getLeftNode().equals(currentTreeNode)){
-			parentOperator.setTreeNodes(newTreeNode, parentOperator.getRightNode());
+		if(parentOperator == null){
+			TreeNode node = parentOperator;
+			node = newTreeNode;
 		}
-		else if(parentOperator.getRightNode().equals(currentTreeNode)){
-			parentOperator.setTreeNodes(newTreeNode, parentOperator.getLeftNode());
+		else{
+			if(parentOperator.getLeftNode() != null && parentOperator.getLeftNode().equals(currentTreeNode)){
+				parentOperator.setTreeNodes(newTreeNode, parentOperator.getRightNode());
+			}
+			else if(parentOperator.getRightNode() != null && parentOperator.getRightNode().equals(currentTreeNode)){
+				parentOperator.setTreeNodes(newTreeNode, parentOperator.getLeftNode());
+			}
 		}
 	}
 }

@@ -1,15 +1,10 @@
 package com.genetic.program.controller;
 
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -21,7 +16,6 @@ import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.Settings;
 import com.genetic.program.tree.BinaryMathTree;
-import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
 import com.genetic.program.util.GenerationToGeneration;
 import com.genetic.program.util.CalculateFitness;
@@ -106,17 +100,15 @@ public class HomeController {
 			
 
 			int generationNumber = 0;
-			int maxTreeSizeLength = oldGeneration.getGenerationMaxSize();
 			
 			writer.flush();
 			while((oldGeneration.getGenes().get(0).getFitnessValue().compareTo(MathUtil.stringToBigDecimalWithScale("0"))) != 0){
-				logger.debug("here");
 				writer.println("Generation " + generationNumber + " " +
 						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " " +
 						"and had " + oldGeneration.getGenes().size() + 
 						" geration max size: " + oldGeneration.getGenerationMaxSize() + NEW_LINE);				
 				
-				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt(), maxTreeSizeLength);
+				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
 				
 				CalculateFitness.caluclateFitnessValuesAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 				
