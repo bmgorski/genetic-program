@@ -1,7 +1,14 @@
 package com.genetic.program.controller;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +32,8 @@ import com.genetic.program.util.SeedGeneration;
  */
 @Controller
 public class HomeController {
-
+	private static final String NEW_LINE = "\n";
+	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	private GenerationToGeneration _generationToGeneration;
 	
@@ -37,92 +45,97 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
-		Settings settings = new Settings();
-		Date startTime;
-		Date endTime;
-
-		startTime = new Date();
-		logger.debug("Setting EnvironmentVariables Time: " + startTime.getTime());
-		settings.setEnvironmentVariables(
-			MathUtil.calculateEnvironmentVariables(
-				MathUtil.xVertex(settings.getQuadraticA(), settings.getQuadraticB()), 
-				settings.getEnviromentSize()
-			)
-		);
-		
-		endTime = new Date();
-		logger.debug("End Setting EnvironmentVariables Time: " + endTime.getTime());
-		logger.debug("Setting EnvironmentVariables took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds");
-		
-		try {
+	public void home(Model model, HttpServletRequest request, HttpServletResponse response) {
+		try{
+			Settings settings = new Settings();
+			Date startTime;
+			Date endTime;
+							
 			startTime = new Date();
-			logger.debug("Generating target binary math tree: " + startTime.getTime());
+			
+			PrintWriter writer = response.getWriter();
+			
+			
+			writer.println("Setting EnvironmentVariables Time: " + startTime.getTime() + NEW_LINE);
+			settings.setEnvironmentVariables(
+				MathUtil.calculateEnvironmentVariables(
+					MathUtil.xVertex(settings.getQuadraticA(), settings.getQuadraticB()), 
+					settings.getEnviromentSize()
+				)
+			);
+			
+			endTime = new Date();
+			writer.println("End Setting EnvironmentVariables Time: " + endTime.getTime()  + NEW_LINE);
+			writer.println("Setting EnvironmentVariables took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
+		
+			startTime = new Date();
+			writer.println("Generating target binary math tree: " + startTime.getTime() + NEW_LINE);
 			
 			BinaryMathTree binaryMathTree = BinaryMathTreeParser.stringEquationToBinaryMathTree(settings.getTargetFunction());
 			
 			endTime = new Date();
-			logger.debug("End Generating target binary math tree: " + endTime.getTime());
-			logger.debug("Generating target binary math tree took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds");
+			writer.println("End Generating target binary math tree: " + endTime.getTime() + NEW_LINE);
+			writer.println("Generating target binary math tree took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 			startTime = new Date();
-			logger.debug("Generating Enviroment Fitness Targets: " + startTime.getTime());
+			writer.println("Generating Enviroment Fitness Targets: " + startTime.getTime() + NEW_LINE);
 			
 			settings.setEnviromentFitnessTargets(MathUtil.generateBinaryMathTreeFitness(settings.getEnvironmentVariables(), binaryMathTree));
 			
 			endTime = new Date();
-			logger.debug("End Generating Enviroment Fitness Targets: " + endTime.getTime());
-			logger.debug("Generating Enviroment Fitness Targets took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds");
+			writer.println("End Generating Enviroment Fitness Targets: " + endTime.getTime() + NEW_LINE);
+			writer.println("Generating Enviroment Fitness Targets took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 			startTime = new Date();
-			logger.debug("Generating Seed Generation: " + startTime.getTime());
+			writer.println("Generating Seed Generation: " + startTime.getTime() + NEW_LINE);
 			
-			Generation seedGeneration = SeedGeneration.getSeeds(settings.getSeedGenerationSettings(), settings.getValidOperators());
+			Generation oldGeneration  = SeedGeneration.getSeeds(settings.getSeedGenerationSettings(), settings.getValidOperators());
 			
 			endTime = new Date();
-			logger.debug("End Generating Seed Generation: " + endTime.getTime());
-			logger.debug("Generating Seed Generation took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds");
+			writer.println("End Generating Seed Generation: " + endTime.getTime() + NEW_LINE);
+			writer.println("Generating Seed Generation took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 			startTime = new Date();
-			logger.debug("Caluclate Scores And Prune: " + startTime.getTime());
+			writer.println("Caluclate Scores And Prune: " + startTime.getTime() + NEW_LINE);
 			
-			CalculateFitness.caluclateFitnessValuesAndPrune(seedGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
+			CalculateFitness.caluclateFitnessValuesAndPrune(oldGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 			
 			endTime = new Date();
-			logger.debug("Caluclate Scores And Prune: " + endTime.getTime());
-			logger.debug("Caluclate Scores And Prune took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds");
+			writer.println("Caluclate Scores And Prune: " + endTime.getTime() + NEW_LINE);
+			writer.println("Caluclate Scores And Prune took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 
 			int generationNumber = 0;
-			Generation oldGeneration = seedGeneration;
+			int maxTreeSizeLength = oldGeneration.getGenerationMaxSize();
 			
+			writer.flush();
 			while((oldGeneration.getGenes().get(0).getFitnessValue().compareTo(MathUtil.stringToBigDecimalWithScale("0"))) != 0){
-				logger.debug("Generation " + generationNumber + " " +
+				logger.debug("here");
+				writer.println("Generation " + generationNumber + " " +
 						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " " +
 						"and had " + oldGeneration.getGenes().size() + 
-						" genes left in the gene pool" +
-						" there size of the tree was: ");				
+						" geration max size: " + oldGeneration.getGenerationMaxSize() + NEW_LINE);				
 				
-				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
+				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt(), maxTreeSizeLength);
 				
 				CalculateFitness.caluclateFitnessValuesAndPrune(newGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 				
 				oldGeneration = null;
 				oldGeneration = newGeneration;
 				generationNumber++;
+				
+				writer.flush();
 			}
 			
-			logger.debug("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool");				
+			writer.println("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool" + NEW_LINE);				
 
 			
-			logger.debug("Yeah we won!!!");
-
+			writer.println("Yeah we won!!!");
+			writer.flush();
 			
 			
-		} catch (BinaryMathTreeException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return "home";
 	}
 }

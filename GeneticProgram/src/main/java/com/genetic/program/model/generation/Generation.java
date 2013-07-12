@@ -13,5 +13,16 @@ public class Generation {
 	public void setGenes(List<Gene> genes) {
 		this.genes = genes;
 	}
+	
+	public int getGenerationMaxSize(){
+		int maxLength = 0;
+		for(Gene gene : genes){
+			int size = gene.getBinaryMathTree().size();
+			if(maxLength < size){
+				maxLength = size;
+			}
+		}
+		return maxLength;
+	}
 
 }
