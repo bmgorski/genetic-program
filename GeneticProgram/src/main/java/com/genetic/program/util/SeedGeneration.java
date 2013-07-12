@@ -133,7 +133,7 @@ public class SeedGeneration {
 			int currentTry = MathUtil.randomNumber(0, numberOFVariableAndConstancts - 1);
 			
 			if(constantsAndVariables[currentTry] == null){
-				constantsAndVariables[currentTry] = new String ("x");
+				constantsAndVariables[currentTry] = "x";
 				countNumberOfConstantsAdded++;
 			}
 		}

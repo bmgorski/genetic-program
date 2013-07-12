@@ -14,7 +14,7 @@ import com.genetic.program.model.generation.Generation;
 
 public class CalculateFitness {
 	
-	private static final int MAX_NUMBER_AFTER_PRUNNING = 500;
+	private static final int MAX_NUMBER_AFTER_PRUNNING = 2000;
 	private static final Logger logger = LoggerFactory
 			.getLogger(MathUtil.class);
 	
