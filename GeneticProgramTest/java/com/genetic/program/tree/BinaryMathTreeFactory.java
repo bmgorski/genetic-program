@@ -26,6 +26,9 @@ public class BinaryMathTreeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static BinaryMathTree createBinaryMathTree() {
-		return new BinaryMathTree();
+		SubtractionNode subtractionNode = (SubtractionNode) TreeNodeFactory.createcreateSubtractionNode();
+		subtractionNode.setTreeNodes(TreeNodeFactory.createcreateConstantNode(), TreeNodeFactory.createcreateConstantNode());
+		
+		return new BinaryMathTree(subtractionNode);
 	}
 }

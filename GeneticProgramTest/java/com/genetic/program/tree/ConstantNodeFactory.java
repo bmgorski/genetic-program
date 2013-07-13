@@ -1,5 +1,7 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
+
 
 
 /**
@@ -26,6 +28,8 @@ public class ConstantNodeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static ConstantNode createConstantNode() {
-		return new ConstantNode();
+		ConstantNode constantNode = new ConstantNode();
+		constantNode.setLeafValue(BigDecimal.TEN);
+		return constantNode;
 	}
 }

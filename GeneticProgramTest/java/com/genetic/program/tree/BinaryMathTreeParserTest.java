@@ -124,7 +124,7 @@ public class BinaryMathTreeParserTest {
 	@Test
 	public void testStringEquationToBinaryMathTree_1()
 		throws Exception {
-		String equation = "";
+		String equation = "2+2*2/2-2";
 
 		BinaryMathTree result = BinaryMathTreeParser.stringEquationToBinaryMathTree(equation);
 
@@ -148,7 +148,7 @@ public class BinaryMathTreeParserTest {
 	@Test
 	public void testStringEquationToBinaryMathTree_2()
 		throws Exception {
-		String equation = "";
+		String equation = "2+2*2/2-2";
 
 		BinaryMathTree result = BinaryMathTreeParser.stringEquationToBinaryMathTree(equation);
 
@@ -172,7 +172,7 @@ public class BinaryMathTreeParserTest {
 	@Test
 	public void testStringEquationToBinaryMathTree_3()
 		throws Exception {
-		String equation = "";
+		String equation = "2+2*2/2-2";
 
 		BinaryMathTree result = BinaryMathTreeParser.stringEquationToBinaryMathTree(equation);
 
@@ -196,7 +196,7 @@ public class BinaryMathTreeParserTest {
 	@Test
 	public void testStringEquationToBinaryMathTree_4()
 		throws Exception {
-		String equation = "";
+		String equation = "2+2*2/2-2";
 
 		BinaryMathTree result = BinaryMathTreeParser.stringEquationToBinaryMathTree(equation);
 

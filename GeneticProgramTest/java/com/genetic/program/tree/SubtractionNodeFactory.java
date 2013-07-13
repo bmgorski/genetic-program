@@ -26,6 +26,8 @@ public class SubtractionNodeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static SubtractionNode createSubtractionNode() {
-		return new SubtractionNode();
+		SubtractionNode subtractionNode = new SubtractionNode();
+		subtractionNode.setTreeNodes(ConstantNodeFactory.createConstantNode(), ConstantNodeFactory.createConstantNode());
+		return subtractionNode;
 	}
 }

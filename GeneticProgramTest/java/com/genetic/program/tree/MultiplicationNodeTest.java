@@ -24,8 +24,11 @@ public class MultiplicationNodeTest {
 	public void testGetValue_1()
 		throws Exception {
 		MultiplicationNode fixture = MultiplicationNodeFactory.createMultiplicationNode();
-		HashMap<String, BigDecimal> variables = new HashMap();
-
+		HashMap<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+		
+		assertNotNull(fixture.getLeftNode());
+		assertNotNull(fixture.getRightNode());
+		
 		BigDecimal result = fixture.getValue(variables);
 
 		// add additional test code here

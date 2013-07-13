@@ -1,5 +1,9 @@
 package com.genetic.program.tree;
 
+import java.math.BigDecimal;
+
+import com.genetic.program.math.MathUtil;
+
 
 
 /**
@@ -26,7 +30,9 @@ public class TreeNodeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static TreeNode createcreateConstantNode() {
-		return ConstantNodeFactory.createConstantNode();
+		ConstantNode constantNode = ConstantNodeFactory.createConstantNode();
+		constantNode.setLeafValue(MathUtil.stringToBigDecimalWithScale("5"));
+		return constantNode;
 	}
 
 

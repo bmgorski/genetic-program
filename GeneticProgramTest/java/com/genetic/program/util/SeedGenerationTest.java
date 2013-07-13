@@ -62,7 +62,7 @@ public class SeedGenerationTest {
 	public void testGetSeeds_2()
 		throws Exception {
 		SeedGenerationSettings seedGenerationSettings = SeedGenerationSettingsFactory.createSeedGenerationSettings();
-		String[] validOperators = new String[] {};
+		String[] validOperators = new String[] {"-"};
 
 		Generation result = SeedGeneration.getSeeds(seedGenerationSettings, validOperators);
 
@@ -85,7 +85,7 @@ public class SeedGenerationTest {
 	@Test
 	public void testRandomOperator_1()
 		throws Exception {
-		String[] validOperators = new String[] {};
+		String[] validOperators = new String[] {"+"};
 
 		String result = SeedGeneration.randomOperator(validOperators);
 

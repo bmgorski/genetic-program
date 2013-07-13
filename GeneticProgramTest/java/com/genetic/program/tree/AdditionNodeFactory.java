@@ -26,6 +26,8 @@ public class AdditionNodeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static AdditionNode createAdditionNode() {
-		return new AdditionNode();
+		AdditionNode additionNode = new AdditionNode();
+		additionNode.setTreeNodes(ConstantNodeFactory.createConstantNode(), ConstantNodeFactory.createConstantNode());
+		return additionNode;
 	}
 }

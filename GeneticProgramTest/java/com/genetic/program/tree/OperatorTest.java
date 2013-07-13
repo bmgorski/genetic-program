@@ -26,7 +26,7 @@ public class OperatorTest {
 		TreeNode result = fixture.getLeftNode();
 
 		// add additional test code here
-		assertEquals(null, result);
+		assertNotNull(result);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class OperatorTest {
 		// An unexpected exception was thrown in user code while executing this test:
 		//    java.lang.NullPointerException
 		//       at com.genetic.program.tree.Operator.getNumberOfChildren(Operator.java:33)
-		assertEquals(0, result);
+		assertEquals(2, result);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class OperatorTest {
 		// An unexpected exception was thrown in user code while executing this test:
 		//    java.lang.NullPointerException
 		//       at com.genetic.program.tree.Operator.getNumberOfChildren(Operator.java:33)
-		assertEquals(0, result);
+		assertEquals(2, result);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class OperatorTest {
 		TreeNode result = fixture.getRightNode();
 
 		// add additional test code here
-		assertEquals(null, result);
+		assertNotNull(fixture);
 	}
 
 	/**

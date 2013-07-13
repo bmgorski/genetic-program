@@ -4,6 +4,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.GenerationFactory;
+import com.genetic.program.model.generation.Settings;
 import com.rits.cloning.Cloner;
 
 /**
@@ -42,17 +43,17 @@ public class GenerationToGenerationTest {
 	@Test
 	public void testPopulate_1()
 		throws Exception {
+		Settings settings = new Settings();
+		
 		GenerationToGeneration fixture = GenerationToGenerationFactory.createGenerationToGeneration();
-		Generation oldGeneration = GenerationFactory.createGeneration();
-		String[] validOperators = new String[] {};
+		Generation oldGeneration = GenerationFactory.createGeneration(10);
 		int minInt = 1;
-		int maxInt = 1;
+		int maxInt = 9;
 
-		Generation result = fixture.populate(oldGeneration, validOperators, minInt, maxInt);
+		Generation result = fixture.populate(oldGeneration, settings.getValidOperators(), minInt, maxInt);
 
 		// add additional test code here
 		assertNotNull(result);
-		assertEquals(0, result.getGenerationMaxSize());
 	}
 
 	/**

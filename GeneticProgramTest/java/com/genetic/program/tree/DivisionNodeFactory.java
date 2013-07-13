@@ -26,6 +26,8 @@ public class DivisionNodeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static DivisionNode createDivisionNode() {
-		return new DivisionNode();
+		DivisionNode divisionNode = new DivisionNode();
+		divisionNode.setTreeNodes(ConstantNodeFactory.createConstantNode(), ConstantNodeFactory.createConstantNode());
+		return divisionNode;
 	}
 }

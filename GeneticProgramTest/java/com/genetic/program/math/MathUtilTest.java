@@ -100,13 +100,14 @@ public class MathUtilTest {
 	public void testGenerateBinaryMathTreeFitness_2()
 		throws Exception {
 		List<BigDecimal> environments = new ArrayList<BigDecimal>();
+		environments.add(BigDecimal.TEN);
 		BinaryMathTree binaryMathTree = BinaryMathTreeFactory.createBinaryMathTree();
 
 		List<BigDecimal> result = MathUtil.generateBinaryMathTreeFitness(environments, binaryMathTree);
 
 		// add additional test code here
 		assertNotNull(result);
-		assertEquals(0, result.size());
+		assertEquals(1, result.size());
 	}
 
 	/**
@@ -202,11 +203,7 @@ public class MathUtilTest {
 		BigDecimal result = MathUtil.stringToBigDecimalWithScale(number);
 
 		// add additional test code here
-		// An unexpected exception was thrown in user code while executing this test:
-		//    java.lang.NumberFormatException
-		//       at java.math.BigDecimal.<init>(Unknown Source)
-		//       at java.math.BigDecimal.<init>(Unknown Source)
-		//       at com.genetic.program.math.MathUtil.stringToBigDecimalWithScale(MathUtil.java:104)
+
 		assertNotNull(result);
 	}
 
@@ -220,18 +217,13 @@ public class MathUtilTest {
 	@Test
 	public void testStringToDouble_1()
 		throws Exception {
-		String doubleString = "";
+		String doubleString = "2";
 
 		double result = MathUtil.stringToDouble(doubleString);
 
 		// add additional test code here
-		// An unexpected exception was thrown in user code while executing this test:
-		//    java.lang.NumberFormatException
-		//       at java.math.BigDecimal.<init>(Unknown Source)
-		//       at java.math.BigDecimal.<init>(Unknown Source)
-		//       at com.genetic.program.math.MathUtil.stringToBigDecimalWithScale(MathUtil.java:104)
-		//       at com.genetic.program.math.MathUtil.stringToDouble(MathUtil.java:79)
-		assertEquals(0.0, result, 0.1);
+
+		assertEquals(2.0, result, 0.1);
 	}
 
 	/**

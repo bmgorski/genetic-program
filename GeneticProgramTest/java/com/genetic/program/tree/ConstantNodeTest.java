@@ -29,7 +29,7 @@ public class ConstantNodeTest {
 		BigDecimal result = fixture.getValue(variables);
 
 		// add additional test code here
-		assertEquals(null, result);
+		assertEquals(BigDecimal.TEN, result);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class ConstantNodeTest {
 		int result = fixture.nodeType();
 
 		// add additional test code here
-		assertEquals(3, result);
+		assertEquals(2, result);
 	}
 
 	/**

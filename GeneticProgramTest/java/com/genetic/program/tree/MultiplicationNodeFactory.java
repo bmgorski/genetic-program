@@ -26,6 +26,8 @@ public class MultiplicationNodeFactory
 	 * @generatedBy CodePro at 7/12/13 4:55 PM
 	 */
 	public static MultiplicationNode createMultiplicationNode() {
-		return new MultiplicationNode();
+		MultiplicationNode multiplicationNode = new MultiplicationNode();
+		multiplicationNode.setTreeNodes(ConstantNodeFactory.createConstantNode(), ConstantNodeFactory.createConstantNode());
+		return multiplicationNode;
 	}
 }

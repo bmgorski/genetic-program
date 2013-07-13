@@ -22,7 +22,7 @@ public class BinaryMathTreeTest {
 	@Test
 	public void testBinaryMathTree_1()
 		throws Exception {
-		BinaryMathTree result = new BinaryMathTree();
+		BinaryMathTree result = BinaryMathTreeFactory.createBinaryMathTree();
 		assertNotNull(result);
 		// add additional test code here
 	}
@@ -42,7 +42,7 @@ public class BinaryMathTreeTest {
 		TreeNode result = fixture.getRootNode();
 
 		// add additional test code here
-		assertEquals(null, result);
+		assertNotNull(result);
 	}
 
 	/**
@@ -56,14 +56,12 @@ public class BinaryMathTreeTest {
 	public void testGetValue_1()
 		throws Exception {
 		BinaryMathTree fixture = BinaryMathTreeFactory.createBinaryMathTree();
-		HashMap<String, BigDecimal> variables = new HashMap();
-
+		HashMap<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+				
 		BigDecimal result = fixture.getValue(variables);
 
 		// add additional test code here
-		// An unexpected exception was thrown in user code while executing this test:
-		//    java.lang.NullPointerException
-		//       at com.genetic.program.tree.BinaryMathTree.getValue(BinaryMathTree.java:28)
+
 		assertNotNull(result);
 	}
 
@@ -206,7 +204,7 @@ public class BinaryMathTreeTest {
 		// An unexpected exception was thrown in user code while executing this test:
 		//    java.lang.NullPointerException
 		//       at com.genetic.program.tree.BinaryMathTree.size(BinaryMathTree.java:36)
-		assertEquals(0, result);
+		assertEquals(3, result);
 	}
 
 	/**
