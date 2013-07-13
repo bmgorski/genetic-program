@@ -23,7 +23,7 @@ import com.rits.cloning.Cloner;
 public class GenerationToGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(GenerationToGeneration.class);
 	
-	private static final int NUMBER_OF_MUTATIONS = 4;
+	private static final int NUMBER_OF_MUTATIONS = 5;
 	private static final int NUMBER_OF_CROSSOVERS = 1;
 	
 	private Cloner _cloner;
@@ -97,6 +97,7 @@ public class GenerationToGeneration {
 	
 	
 	private TreeNode getCrossOverTreeNode(BinaryMathTree binaryMathTree, boolean sameSize, int targetSize){
+		TreeNode treeNode = null;
 		List<TreeNode> treeNodes = binaryMathTree.levelorder();
 		int treeSize = treeNodes.size() - 1;
 				
@@ -109,11 +110,29 @@ public class GenerationToGeneration {
 			returnIndex = treeSize - MathUtil.randomNumber(1, targetSize);
 		}
 		
+		if(returnIndex < 0){
+			logger.debug(returnIndex + "");
+			returnIndex = 2;
+		}
+		
 		if(returnIndex > treeSize){
+			logger.debug(returnIndex + "");
 			returnIndex = treeSize;
 		}
 		
-		return treeNodes.get(returnIndex);
+		try {
+			treeNode = treeNodes.get(returnIndex);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.debug("treeSize: " + treeSize);
+			logger.debug("returnIndex: " + returnIndex);
+			logger.debug(treeNodes.size() + "");
+		}
+
+		
+		
+		
+		return treeNode;
 	}
 
 	private Gene mutateGene(Gene gene, String[] validOperators, int minInt, int maxInt) {

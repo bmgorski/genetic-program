@@ -10,12 +10,25 @@ import com.genetic.program.math.MathUtil;
 import com.genetic.program.model.generation.Gene;
 import com.genetic.program.model.generation.Generation;
 import com.genetic.program.model.generation.SeedGenerationSettings;
+import com.genetic.program.tree.BinaryMathTreeException;
 import com.genetic.program.tree.BinaryMathTreeParser;
 
 public class SeedGeneration {
 	private static final Logger logger = LoggerFactory.getLogger(SeedGeneration.class);
 
-	public static Generation getSeeds(final SeedGenerationSettings seedGenerationSettings, final String[] validOperators) {
+	public static Generation getSeeds(final SeedGenerationSettings seedGenerationSettings, final String[] validOperators) throws BinaryMathTreeException {
+		if(seedGenerationSettings == null){
+			throw new NullPointerException("SeedGenerationSettings must not be null");
+		}
+		
+		if(validOperators == null){
+			throw new NullPointerException("ValidOperators must not be null");
+		}
+		
+		if(validOperators.length == 0){
+			throw new BinaryMathTreeException("ValidOperators must not be blank");
+		}
+		
 		Generation generation = new Generation();
 		
 		for(int i = 0; i < seedGenerationSettings.getNumberOfSeeds(); i++){
@@ -35,7 +48,7 @@ public class SeedGeneration {
 			
 			
 		}
-		
+
 		return generation;
 	}
 	

@@ -41,16 +41,16 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void home(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try{
+			PrintWriter writer = response.getWriter();
+			Date programStart = new Date();
+						
 			Settings settings = new Settings();
 			Date startTime;
 			Date endTime;
 							
 			startTime = new Date();
 			
-			PrintWriter writer = response.getWriter();
-			
-			
-			writer.println("Setting EnvironmentVariables Time: " + startTime.getTime() + NEW_LINE);
+			writer.println("Setting EnvironmentVariables Time... ");
 			settings.setEnvironmentVariables(
 				MathUtil.calculateEnvironmentVariables(
 					MathUtil.xVertex(settings.getQuadraticA(), settings.getQuadraticB()), 
@@ -59,43 +59,38 @@ public class HomeController {
 			);
 			
 			endTime = new Date();
-			writer.println("End Setting EnvironmentVariables Time: " + endTime.getTime()  + NEW_LINE);
 			writer.println("Setting EnvironmentVariables took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 		
 			startTime = new Date();
-			writer.println("Generating target binary math tree: " + startTime.getTime() + NEW_LINE);
+			writer.println("Generating target binary math tree... ");
 			
 			BinaryMathTree binaryMathTree = BinaryMathTreeParser.stringEquationToBinaryMathTree(settings.getTargetFunction());
 			
 			endTime = new Date();
-			writer.println("End Generating target binary math tree: " + endTime.getTime() + NEW_LINE);
 			writer.println("Generating target binary math tree took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 			startTime = new Date();
-			writer.println("Generating Enviroment Fitness Targets: " + startTime.getTime() + NEW_LINE);
+			writer.println("Generating Enviroment Fitness Targets... ");
 			
 			settings.setEnviromentFitnessTargets(MathUtil.generateBinaryMathTreeFitness(settings.getEnvironmentVariables(), binaryMathTree));
 			
 			endTime = new Date();
-			writer.println("End Generating Enviroment Fitness Targets: " + endTime.getTime() + NEW_LINE);
 			writer.println("Generating Enviroment Fitness Targets took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 			startTime = new Date();
-			writer.println("Generating Seed Generation: " + startTime.getTime() + NEW_LINE);
+			writer.println("Generating Seed Generation... ");
 			
-			Generation oldGeneration  = SeedGeneration.getSeeds(settings.getSeedGenerationSettings(), settings.getValidOperators());
+			Generation oldGeneration = SeedGeneration.getSeeds(settings.getSeedGenerationSettings(), settings.getValidOperators());
 			
 			endTime = new Date();
-			writer.println("End Generating Seed Generation: " + endTime.getTime() + NEW_LINE);
 			writer.println("Generating Seed Generation took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 			startTime = new Date();
-			writer.println("Caluclate Scores And Prune: " + startTime.getTime() + NEW_LINE);
+			writer.println("Caluclate Scores And Prune... ");
 			
 			CalculateFitness.caluclateFitnessValuesAndPrune(oldGeneration, settings.getEnvironmentVariables(), settings.getEnviromentFitnessTargets(), settings.getMaxFitnessValue());
 			
 			endTime = new Date();
-			writer.println("Caluclate Scores And Prune: " + endTime.getTime() + NEW_LINE);
 			writer.println("Caluclate Scores And Prune took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 			
 
@@ -103,10 +98,12 @@ public class HomeController {
 			
 			writer.flush();
 			while((oldGeneration.getGenes().get(0).getFitnessValue().compareTo(MathUtil.stringToBigDecimalWithScale("0"))) != 0){
+				
 				writer.println("Generation " + generationNumber + " " +
-						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " " +
-						"and had " + oldGeneration.getGenes().size() + 
-						" geration max size: " + oldGeneration.getGenerationMaxSize() + NEW_LINE);				
+						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + NEW_LINE);				
+				
+				startTime = new Date();
+				writer.println("Starting generation new generation... ");
 				
 				Generation newGeneration = _generationToGeneration.populate(oldGeneration, settings.getValidOperators(), settings.getSeedGenerationSettings().getMinInt(), settings.getSeedGenerationSettings().getMaxInt());
 				
@@ -115,6 +112,9 @@ public class HomeController {
 				oldGeneration = null;
 				oldGeneration = newGeneration;
 				generationNumber++;
+				
+				endTime = new Date();
+				writer.println("Generation took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
 				
 				writer.flush();
 			}
@@ -125,6 +125,9 @@ public class HomeController {
 			writer.println("Yeah we won!!!");
 			writer.flush();
 			
+			Date programEnd = new Date();
+			
+			writer.println("Program total time in millesconds: " + (programStart.getTime() - programEnd.getTime()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
