@@ -15,7 +15,7 @@ public class MathUtil {
 	
 	public static final int APPLICATION_SCALE = 10;
 	public static final int APPLICATION_ROUNDING = BigDecimal.ROUND_DOWN;
-	public static final int ENVIRONMENT_MULTIPLIER = 10;
+	public static final int ENVIRONMENT_MULTIPLIER = 2;
 
 	/**
 	 * 

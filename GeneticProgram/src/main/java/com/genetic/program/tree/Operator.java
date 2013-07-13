@@ -35,6 +35,15 @@ public abstract class Operator  extends TreeNode {
 		return numberOfChildren;
 	}
 	
+	@Override
+	public TreeNode left() {
+		return this.getLeftNode();
+	};
+	
+	@Override
+	public TreeNode right() {
+		return this.getRightNode();
+	};
 	
 	public abstract String operatorStringEquivalant();
 }

@@ -9,7 +9,7 @@ public class Settings {
 	private SeedGenerationSettings seedGenerationSettings = new SeedGenerationSettings();
 	private String targetFunction = "(3*x*x+4)/5";
 	
-	private BigDecimal quadraticA = MathUtil.stringToBigDecimalWithScale("2");
+	private BigDecimal quadraticA = MathUtil.stringToBigDecimalWithScale("3");
 	private BigDecimal quadraticB = MathUtil.stringToBigDecimalWithScale("0");
 	private Integer enviromentSize = 200;
 	private BigDecimal maxFitnessValue = MathUtil.stringToBigDecimalWithScale("10000000000");

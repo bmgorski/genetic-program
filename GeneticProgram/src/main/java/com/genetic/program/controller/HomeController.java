@@ -1,6 +1,7 @@
 package com.genetic.program.controller;
 
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +50,6 @@ public class HomeController {
 			Date endTime;
 							
 			startTime = new Date();
-			
 			writer.println("Setting EnvironmentVariables Time... ");
 			settings.setEnvironmentVariables(
 				MathUtil.calculateEnvironmentVariables(
@@ -100,7 +100,8 @@ public class HomeController {
 			while((oldGeneration.getGenes().get(0).getFitnessValue().compareTo(MathUtil.stringToBigDecimalWithScale("0"))) != 0){
 				
 				writer.println("Generation " + generationNumber + " " +
-						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + NEW_LINE);				
+						"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString());				
+				writer.println("Infix equation: " + oldGeneration.getGenes().get(0).getBinaryMathTree().infix() + NEW_LINE);
 				
 				startTime = new Date();
 				writer.println("Starting generation new generation... ");
@@ -115,19 +116,27 @@ public class HomeController {
 				
 				endTime = new Date();
 				writer.println("Generation took: " + (endTime.getTime() - startTime.getTime()) + " milliseconds" + NEW_LINE);
+
 				
 				writer.flush();
 			}
 			
-			writer.println("Generation " + generationNumber + " best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString() + " and had " + oldGeneration.getGenes().size() + " genes left in the gene pool" + NEW_LINE);				
-
+			writer.println("Generation " + generationNumber + " " +
+					"best fit was: " + oldGeneration.getGenes().get(0).getFitnessValue().toString());
+			String infix = oldGeneration.getGenes().get(0).getBinaryMathTree().infix();
+			writer.println("Infix equation: " + infix + NEW_LINE);
+			
+			infix = infix.replaceAll(" ", "");
+			
+		
+			writer.println("http://www.wolframalpha.com/input/?i=" + URLEncoder.encode(infix, "UTF-8"));
 			
 			writer.println("Yeah we won!!!");
 			writer.flush();
 			
 			Date programEnd = new Date();
 			
-			writer.println("Program total time in millesconds: " + (programStart.getTime() - programEnd.getTime()));
+			writer.println("Program total time in millesconds: " + (programEnd.getTime() - programStart.getTime()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

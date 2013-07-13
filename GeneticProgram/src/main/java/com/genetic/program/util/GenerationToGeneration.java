@@ -157,9 +157,7 @@ public class GenerationToGeneration {
 			Operator currentOperator = (Operator) nodeToChange;
 			
 			HashSet<String> hashSet = new HashSet<String>();
-			
-			System.out.println("currentOperator: " + currentOperator);
-			
+						
 			hashSet.addAll(Arrays.asList(validOperators));
 			hashSet.remove(currentOperator.operatorStringEquivalant());
 			

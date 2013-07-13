@@ -33,4 +33,11 @@ public abstract class TreeNode {
 		this.parent = parent;
 	}
 	
+	public TreeNode left(){
+		return null;
+	}
+	
+	public TreeNode right(){
+		return null;
+	}
 }
