@@ -153,10 +153,12 @@ public class GenerationToGeneration {
 			
 			replaceParentChild(parentOperator, currentOperand, newOperand);
 		}
-		else{
+		if(nodeToChange instanceof Operator){
 			Operator currentOperator = (Operator) nodeToChange;
 			
 			HashSet<String> hashSet = new HashSet<String>();
+			
+			System.out.println("currentOperator: " + currentOperator);
 			
 			hashSet.addAll(Arrays.asList(validOperators));
 			hashSet.remove(currentOperator.operatorStringEquivalant());

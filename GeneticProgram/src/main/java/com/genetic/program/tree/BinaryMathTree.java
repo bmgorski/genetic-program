@@ -12,10 +12,16 @@ import org.slf4j.LoggerFactory;
 
 public class BinaryMathTree {
 	private static final Logger logger = LoggerFactory.getLogger(BinaryMathTree.class);
-
 	private TreeNode rootNode;
 	private List<String> variableNames = new ArrayList<String>();
 	
+	public BinaryMathTree(TreeNode rootNode) {
+		this.rootNode = rootNode;
+	}
+	
+	public BinaryMathTree() {
+	}
+
 	public TreeNode getRootNode() {
 		return rootNode;
 	}
@@ -42,9 +48,7 @@ public class BinaryMathTree {
 		List<TreeNode> levelOrder = new ArrayList<TreeNode>();
 		Queue<TreeNode> queue = new LinkedList<TreeNode>();
 		queue.add(this.rootNode);
-		
-		logger.trace("adding rootNode roteNode size: " + this.rootNode.getNumberOfChildren());
-		
+				
 		while(!queue.isEmpty()){
 		    TreeNode treeNode = queue.poll();
 		    levelOrder.add(treeNode);

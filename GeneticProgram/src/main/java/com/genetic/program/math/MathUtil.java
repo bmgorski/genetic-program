@@ -100,7 +100,16 @@ public class MathUtil {
 		return enviromnentTargets;
 	}
 	
+	/**
+	 * 
+	 * @param number
+	 * @return returns a BigDecimal with scale set or null if the string is either blank or null
+	 */
 	public static BigDecimal stringToBigDecimalWithScale(String number){
+		if(number.isEmpty() || number == null){
+			return null;
+		}
+		
 		BigDecimal bigDecimal = new BigDecimal(number);
 		bigDecimal.setScale(APPLICATION_SCALE);
 		

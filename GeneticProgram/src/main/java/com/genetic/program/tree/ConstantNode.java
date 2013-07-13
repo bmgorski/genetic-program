@@ -8,7 +8,7 @@ public class ConstantNode extends Operand  {
 
 	@Override
 	public int nodeType() {
-		return TreeNode.ADDITION_NODE;
+		return TreeNode.CONSTANT_NODE;
 	}
 
 	@Override
